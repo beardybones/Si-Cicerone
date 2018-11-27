@@ -24,19 +24,23 @@ $("#city_form").submit(function(event){
       }).then(function(response) {
         console.log(response.records);
         for ( var i = 0; i < response.records.length; i++ ) {
-            console.log(response.records[i].fields.name)
-            //distillary name print
-            $(".distillery").append(response.records[i].fields.name + "<br>")
+            
+            $(".distillery").append(response.records[i].fields.name + "<br>"+  response.records[i].fields.address1 +", " + response.records[i].fields.city + ", " + response.records[i].fields.state + "<br>" + response.records[i].fields.cat_name + ", " + response.records[i].fields.style_name + "<br>" +response.records[i].fields.website + "<br>" + response.records[i].fields.descript + "<br><br><br>")
 
-            //address name print, no zip code, sadly
-            $(".address").append(response.records[i].fields.address1 +", " + response.records[i].fields.city + ", " + response.records[i].fields.state + "<br>")
 
-            //cat name
-            $(".cat").append(response.records[i].fields.cat_name + ", " + response.records[i].fields.style_name + "<br>")
-//website print
-            $(".web").append(response.records[i].fields.website + "<br>")
-            //description
-            $(".description").append(response.records[i].fields.descript + "<br>")
+
+//             //distillary name print
+//             $(".distillery").append(response.records[i].fields.name + "<br>")
+
+//             //address name print, no zip code, sadly
+//             $(".address").append(response.records[i].fields.address1 +", " + response.records[i].fields.city + ", " + response.records[i].fields.state + "<br>")
+
+//             //cat name
+//             $(".cat").append(response.records[i].fields.cat_name + ", " + response.records[i].fields.style_name + "<br>")
+// //website print
+//             $(".web").append(response.records[i].fields.website + "<br>")
+//             //description
+//             $(".description").append(response.records[i].fields.descript + "<br>")
             
         }
     
