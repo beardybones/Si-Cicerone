@@ -73,7 +73,9 @@ $("#city_form").submit(function(event){
     }
 
     searchTerm = searchTerm.substring(1, searchTerm.length)
-    var queryURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + searchTerm + "&facet=style_name&facet=cat_name&facet=name_breweries&facet=country"
+    // var queryURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + searchTerm + "&facet=style_name&facet=cat_name&facet=name_breweries&facet=country"
+
+    var queryURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + searchTerm + "&rows=100&facet=style_name&facet=cat_name&facet=city&facet=country"
     // var queryURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + searchTerm + "&facet=style_name&facet=cat_name&facet=" + searchTerm + "&facet=country"
   
     console.log(searchTerm)
