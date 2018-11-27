@@ -1,12 +1,8 @@
-
-
-
-
-$("#city_form").submit(function(event){
+$("#keyword_form").submit(function(event){
     event.preventDefault();
     var searchTerm = "";
 
-    var input = $("#city_input").val().trim()
+    var input = $("#keyword_input").val().trim()
 
     input = input.split(" ")
 
@@ -19,11 +15,14 @@ $("#city_form").submit(function(event){
     var queryURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + searchTerm + "&facet=style_name&facet=cat_name&facet=name_breweries&facet=country"
   
     console.log(searchTerm)
+
+    //key word search term
     $.ajax({
         url: queryURL, method: "GET"
       }).then(function(response) {
         console.log(response.records);
-        $(".distillery").html("")
+        $(".keyword").html("")
+        
         for ( var i = 0; i < response.records.length; i++ ) {
              if (response.records[i].fields.website ===undefined){
                 response.records[i].fields.website = "";}
@@ -42,24 +41,7 @@ $("#city_form").submit(function(event){
              if (response.records[i].fields.descript===undefined){
             response.records[i].fields.descript = "";
             }
-            $(".distillery").append(response.records[i].fields.name + "<br>"+  response.records[i].fields.address1 +"  " + response.records[i].fields.city + "  " + response.records[i].fields.state + "<br>" + response.records[i].fields.cat_name + "  " + response.records[i].fields.style_name + "<br><a id='id5' name='link' href='" +response.records[i].fields.website + "'>" +response.records[i].fields.website+ "</a><br>" + response.records[i].fields.descript + "<br><br><br>")
-           
-
-
-
-//             //distillary name print
-//             $(".distillery").append(response.records[i].fields.name + "<br>")
-
-//             //address name print, no zip code, sadly
-//             $(".address").append(response.records[i].fields.address1 +", " + response.records[i].fields.city + ", " + response.records[i].fields.state + "<br>")
-
-//             //cat name
-//             $(".cat").append(response.records[i].fields.cat_name + ", " + response.records[i].fields.style_name + "<br>")
-// //website print
-//             $(".web").append(response.records[i].fields.website + "<br>")
-//             //description
-//             $(".description").append(response.records[i].fields.descript + "<br>")
-            
+            $(".keyword").append(response.records[i].fields.name + "<br>"+  response.records[i].fields.address1 +"  " + response.records[i].fields.city + "  " + response.records[i].fields.state + "<br>" + response.records[i].fields.cat_name + "  " + response.records[i].fields.style_name + "<br><a id='id5' name='link' href='" +response.records[i].fields.website + "'>" +response.records[i].fields.website+ "</a><br>" + response.records[i].fields.descript + "<br><br><br>")        
         }
     
       });
