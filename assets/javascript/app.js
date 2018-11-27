@@ -23,6 +23,7 @@ $("#city_form").submit(function(event){
         url: queryURL, method: "GET"
       }).then(function(response) {
         console.log(response.records);
+        $(".distillery").html("")
         for ( var i = 0; i < response.records.length; i++ ) {
              if (response.records[i].fields.website ===undefined){
                 response.records[i].fields.website = "";}
@@ -41,7 +42,7 @@ $("#city_form").submit(function(event){
              if (response.records[i].fields.descript===undefined){
             response.records[i].fields.descript = "";
             }
-            $(".distillery").append(response.records[i].fields.name + "<br>"+  response.records[i].fields.address1 +", " + response.records[i].fields.city + ", " + response.records[i].fields.state + "<br>" + response.records[i].fields.cat_name + ", " + response.records[i].fields.style_name + "<br><a id='id5' name='link' href='" +response.records[i].fields.website + "'>" +response.records[i].fields.website+ "</a><br>" + response.records[i].fields.descript + "<br><br><br>")
+            $(".distillery").append(response.records[i].fields.name + "<br>"+  response.records[i].fields.address1 +"  " + response.records[i].fields.city + "  " + response.records[i].fields.state + "<br>" + response.records[i].fields.cat_name + "  " + response.records[i].fields.style_name + "<br><a id='id5' name='link' href='" +response.records[i].fields.website + "'>" +response.records[i].fields.website+ "</a><br>" + response.records[i].fields.descript + "<br><br><br>")
            
 
 
