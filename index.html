@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Title</title>
+  <title>Si Cicerone</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,34 +10,72 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
     crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+
   <!-- CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
 
 <body>
-  <div class="container text-center main">
+  <div class="container text-center main" >
+
     <img src="assets/images/Cicerone-logo.png" class="img-responsive" width="128px">
-    <div class="row justify-content-center m-1">
+    <div class="row justify-content-center m-1" id="header">
       <form>
         <div class="form-group">
           <label for="inputAge" class="text-white">Please verify your age.</label>
           <input type="text" class="form-control" id="inputAge" placeholder="mm/dd/yyyy">
         </div>
-        <button type="button" class="btn btn-outline-warning">Submit</button>
+        <button type="button" class="btn btn-outline-warning" id="age-submit">Submit</button>
       </form>
     </div>
+
+    <div class="row justify-content-center m-1" id="location">
+        <form>
+          <div class="form-group">
+            <label for="inputAge" class="text-white">Enter your location</label>
+            <input type="text" class="form-control" id="location-input" placeholder="Location">
+          </div>
+          <button type="button" class="btn btn-outline-warning" id="location-submit">Submit</button>
+        </form>
+      </div>
+  
+      <div class="row justify-content-center m-1" id="main-inputs">
+          
+          <form>
+                      
+                
+                <div class="form-group">
+              <label for="inputAge" class="text-white">Choose Alcohol</label>
+              <input type="text" class="form-control" id="alcohol-input" placeholder="Alcohol">
+            </div>
+            <div class="form-group">
+                <label for="inputAge" class="text-white">Choose Food style</label>
+                <input type="text" class="form-control" id="food-input" placeholder="Food">
+              </div>
+              <button type="button" class="btn btn-outline-warning btn-lg" id="back-button-1">
+                  <span class="fas fa-chevron-left" aria-hidden="true"></span>
+                </button> 
+            <button type="button" class="btn btn-outline-warning" id="input-submit">Submit</button>
+          </form>
+        </div>
+
   </div>
+
+  
+
 
 
   <!-- Optional JavaScript -->
 
-  <script src="assets/javascript/app.js"></script>
+ 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
     crossorigin="anonymous"></script>
+    <script src="assets/javascript/app.js"></script>
 </body>
 
 </html>
