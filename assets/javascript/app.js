@@ -2,8 +2,8 @@ $("#location").hide();
 $("#main-inputs").hide();
 $("#results").hide();
 
-$("#age-submit").on("click", function(){
-
+$("#age-submit").on("click", function(e){
+e.preventDefault();
     // if userAge > 21 verify user
 
 
@@ -14,7 +14,9 @@ $("#age-submit").on("click", function(){
     // if the age is < 21 alert the user and do nothing
 })
 
-$("#location-submit").on("click", function(){
+$("#location-submit").on("click", function(e){
+    e.preventDefault();
+
     // gather user input
 
     // reference user input against APIs
@@ -24,7 +26,8 @@ $("#location-submit").on("click", function(){
     $("#main-inputs").show();
 })
 
-$("#back-button-1").on("click", function(){
+$("#back-button-1").on("click", function(e){
+    e.preventDefault();
 
 
     $("#location").show();
