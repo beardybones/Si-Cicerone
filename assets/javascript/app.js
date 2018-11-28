@@ -63,7 +63,7 @@ $("#location-submit").on("click", function (e) {
             $("#location").hide();
             $("#main-inputs").show();
 
-            // Added code for an input-submit...Chord review...
+            // On Submit builds the two urls required for the Zomato ajax calls
             $('#input-submit').on('click', function (e) {
                 e.preventDefault();
                 cuisineInput = $('#food-input').val().trim();
@@ -76,7 +76,9 @@ $("#location-submit").on("click", function (e) {
                 urlRadius = '&radius=' + radiusMeters;
                 cuisineUrl = urlOne + urlLat + urlLon
 
-                // Ajax call to gather cuisine object for the lat/long coordinates
+                // Ajax call to Zomato to gather cuisine object for the lat/long coordinates
+                cuisineUrl = urlOne + urlLat + urlLon
+                // console.log(cuisineUrl);
                 $.ajax({
                     url: cuisineUrl,
                     method: "GET",
@@ -93,12 +95,16 @@ $("#location-submit").on("click", function (e) {
                         // compare our cuisine input to the zomato api
                         if ((responseOne.cuisines[i].cuisine.cuisine_name).toLowerCase() === (cuisineInput).toLocaleLowerCase()) {
                             cuisineId = responseOne.cuisines[i].cuisine.cuisine_id;
+                            var restaurantsArray = [];
+                            var urlCuisine = '&cuisines=' + cuisineId;
+                            var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine;
 
                             // ajax call to gather eatery data based on lat lon coordinates and cuisine
                             restaurantsArray = [];
                             urlCuisine = '&cuisines=' + cuisineId;
                             queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine;
 
+                            // ajax call to Zomato to get restaurants based on location and cuisine and build restaurant name array for comparison with open beer databasd
                             $.ajax({
                                 url: queryURL,
                                 method: "GET",
@@ -133,11 +139,4 @@ $("#back-button-1").on("click", function (e) {
     $("#location").show();
     $("#main-inputs").hide();
 });
-
-
-
-
-
-
-
 
