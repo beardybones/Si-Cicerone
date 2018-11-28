@@ -20,11 +20,11 @@ var foodInput = "";
 var userAge = "";
 var googleMapsQueryURL = "";
 var userCoordinates = "";
-$("#inputAge").submit(function(e) {
+$("#inputAge").submit(function (e) {
     e.preventDefault();
 });
 
-$("#age-submit").on("click", function(e) {
+$("#age-submit").on("click", function (e) {
     e.preventDefault();
     // if userAge > 21 verify user
     userAge = $("#inputAge").val().trim();
@@ -45,7 +45,7 @@ $("#age-submit").on("click", function(e) {
     // if the age is < 21 alert the user and do nothing
 })
 
-$("#location-submit").on("click", function(e) {
+$("#location-submit").on("click", function (e) {
     e.preventDefault();
 
     // gather user input
@@ -55,24 +55,24 @@ $("#location-submit").on("click", function(e) {
     $.ajax({
         url: googleMapsQueryURL,
         method: "GET"
-      })
-      
-      .then(function(response){
-          console.log(response);
-          userLong = response.results[0].geometry.location.lng;
-          userLat = response.results[0].geometry.location.lat
-          userCoordinates = userLat + ", " + userLong;
+    })
 
-      })
+        .then(function (response) {
+            console.log(response);
+            userLong = response.results[0].geometry.location.lng;
+            userLat = response.results[0].geometry.location.lat
+            userCoordinates = userLat + ", " + userLong;
+
+        })
     // reference user input against APIs
-console.log(userCoordinates);
+    console.log(userCoordinates);
 
     // move to next screen
     $("#location").hide();
     $("#main-inputs").show();
 })
 
-$("#back-button-1").on("click", function(e) {
+$("#back-button-1").on("click", function (e) {
     e.preventDefault();
 
 
