@@ -1,3 +1,4 @@
+/////NEW ADD ME///
 $("#location").hide();
 $("#main-inputs").hide();
 $("#results").hide();
@@ -7,7 +8,7 @@ var queryURL;
 var beerSearch;
 var beerURL;
 var beerInput;
-
+/////NEW ADD ME///
 $("#age-submit").on("click", function (e) {
     e.preventDefault();
     // if userAge > 21 verify user
@@ -22,7 +23,7 @@ $("#age-submit").on("click", function (e) {
 
 $("#location-submit").on("click", function (e) {
     e.preventDefault();
-
+/////NEW ADD ME///
     searchTerm = "";
 
     input = $("#location-input").val().trim()
@@ -36,7 +37,7 @@ $("#location-submit").on("click", function (e) {
     searchTerm = searchTerm.substring(1, searchTerm.length)
     console.log(searchTerm)
     console.log(queryURL)
-
+/////NEW ADD ME///
 
     // gather user input
 
@@ -67,7 +68,7 @@ $("#back-button-1").on("click", function (e) {
 
 $("#input-submit").on("click", function (e) {
     e.preventDefault();
-
+/////NEW ADD ME///
     //this is the search term for beer set up
     beerSearch = "";
 
@@ -82,7 +83,7 @@ $("#input-submit").on("click", function (e) {
     beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerSearch + "+" + searchTerm + "&rows=150&facet=style_name&facet=cat_name&facet=city&facet=country"
     console.log(beerSearch)
     console.log(beerURL)
-
+/////NEW ADD ME///
 //this is the start of my ajax call searching keywords of beers and cities
     $.ajax({
         url: beerURL, method: "GET"
@@ -97,6 +98,7 @@ $("#input-submit").on("click", function (e) {
 
 
         }
+        /////NEW ADD ME///
         $("#roughLastScreen").show();
         $(".form-group").hide();
 
