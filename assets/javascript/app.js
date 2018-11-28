@@ -14,12 +14,6 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
-var userLocation = "";
-var alcoholInput = "";
-var foodInput = "";
-var userAge = "";
-var googleMapsQueryURL = "";
-var userCoordinates = "";
 $("#inputAge").submit(function (e) {
     e.preventDefault();
 });
@@ -47,6 +41,21 @@ $("#age-submit").on("click", function (e) {
 
 $("#location-submit").on("click", function (e) {
     e.preventDefault();
+/////NEW ADD ME///
+    searchTerm = "";
+
+    input = $("#location-input").val().trim()
+
+    input = input.split(" ")
+
+    for (var i = 0; i < input.length; i++) {
+        searchTerm = searchTerm + "+" + input[i]
+    }
+
+    searchTerm = searchTerm.substring(1, searchTerm.length)
+    console.log(searchTerm)
+    console.log(queryURL)
+/////NEW ADD ME///
 
     // gather user input
     userLocation = $("#location-input").val().trim();
@@ -68,6 +77,7 @@ $("#location-submit").on("click", function (e) {
             // move to next screen
             $("#location").hide();
             $("#main-inputs").show();
+
 
             // Added code for an input-submit...Chord review...
             // On Submit builds the two urls required for the Zomato ajax calls
@@ -127,16 +137,44 @@ $("#location-submit").on("click", function (e) {
                         }
                     }
                 })
+  //this is the search term for beer set up
+    beerSearch = "";
+
+    beerInput = $("#alcohol-input").val().trim()
+
+    beerInput = beerInput.split(" ")
+
+    for (var i = 0; i < beerInput.length; i++) {
+        beerSearch = beerSearch + "+" + beerInput[i]
+    }
+    beerSearch = beerSearch.substring(1, beerSearch.length)
+    beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerSearch + "+" + searchTerm + "&rows=150&facet=style_name&facet=cat_name&facet=city&facet=country"
+    console.log(beerSearch)
+    console.log(beerURL)
+/////NEW ADD ME///
+//this is the start of my ajax call searching keywords of beers and cities
+    $.ajax({
+        url: beerURL, method: "GET"
+    }).then(function (response) {
+        console.log(response)
+        console.log(response.records);
+       
+
+        for (var i = 0; i < response.records.length; i++) {
+
+            console.log(response.records[i].fields.name + "<br>" + response.records[i].fields.address1 + "  " + response.records[i].fields.city + "  " + response.records[i].fields.state + "<br>" + response.records[i].fields.cat_name + "  " + response.records[i].fields.style_name + "<br><a id='id5' name='link' href='" + response.records[i].fields.website + "'>" + response.records[i].fields.website + "</a><br>" + response.records[i].fields.descript + "<br><br><br>")
+
+
+        }
             });
         });
 });
 
 
-$("#back-button-1").on("click", function (e) {
+]$("#back-button-1").on("click", function (e) {
     e.preventDefault();
 
 
     $("#location").show();
     $("#main-inputs").hide();
-});
 
