@@ -16,6 +16,7 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
+
 $("#age-submit").on("click", function (e) {
     e.preventDefault();
     // if userAge > 21 verify user
@@ -28,8 +29,8 @@ $("#age-submit").on("click", function (e) {
         // hide the age input and show the location input
         $("#header").hide();
         $("#location").show();
-    } 
-        // if the age is < 21 alert the user and send them away!
+    }
+    // if the age is < 21 alert the user and send them away!
 
     else {
         alert("You are not old Enough Goodbye!");
@@ -39,12 +40,14 @@ $("#age-submit").on("click", function (e) {
 
 $("#location-submit").on("click", function (e) {
     e.preventDefault();
-
+    
     // gather user input
     userLocation = $("#location-input").val().trim();
+    console.log(userLocation);
     googleMapsQueryURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + userLocation + "&key=AIzaSyB8Eim861DFG-C8nD2Z83vXE1Pbv-kHlwM";
+    
     // googlemaps API call
-    $.ajax({    
+    $.ajax({
         url: googleMapsQueryURL,
         method: "GET"
     })
@@ -63,13 +66,15 @@ $("#location-submit").on("click", function (e) {
             $("#location").hide();
             $("#main-inputs").show();
 
+
+            // Added code for an input-submit...Chord review...
             // On Submit builds the two urls required for the Zomato ajax calls
             $('#input-submit').on('click', function (e) {
                 e.preventDefault();
                 cuisineInput = $('#food-input').val().trim();
 
                 // cuisineIput to be populated by #food-input
-                radiusMeters = 25000;
+                radiusMeters = 8000;
                 zomatoApiKey = '7fd9b4ff24a0fa2eae39b02482c2e9b1';
                 urlOne = 'https://developers.zomato.com/api/v2.1/cuisines?';
                 urlTwo = 'https://developers.zomato.com/api/v2.1/search?';
@@ -87,7 +92,7 @@ $("#location-submit").on("click", function (e) {
                     }
                 }).then(function (responseOne) {
 
-                    cuisineId;
+                    var cuisineId;
                     ct = 0;
 
                     for (var i = 0; i < responseOne.cuisines.length; i++) {
@@ -99,10 +104,7 @@ $("#location-submit").on("click", function (e) {
                             var urlCuisine = '&cuisines=' + cuisineId;
                             var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine;
 
-                            // ajax call to gather eatery data based on lat lon coordinates and cuisine
-                            restaurantsArray = [];
-                            urlCuisine = '&cuisines=' + cuisineId;
-                            queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine;
+                            console.log(queryURL);
 
                             // ajax call to Zomato to get restaurants based on location and cuisine and build restaurant name array for comparison with open beer databasd
                             $.ajax({
@@ -126,17 +128,65 @@ $("#location-submit").on("click", function (e) {
                         }
                     }
                 })
-            $("#main-inputs").hide();
-            $("#logo").hide();
-            $("#results").show();
+
+                //this is the search term for beer set up
+              
+                beerInput = $("#alcohol-input").val().trim()
+                
+                beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&rows=50&sort=name&facet=style_name&facet=cat_name&facet=name_breweries&facet=city&refine.city=" + userLocation;
+                console.log(beerInput);
+                console.log(beerURL);
+
+
+                
+                // Ajax Call to OpenBeerDB
+                $.ajax({
+                    url: beerURL, method: "GET"
+                })
+                
+                .then(function (response) {
+                    console.log(response)
+                    console.log(response.records);
+                    
+                    
+
+                    // for (var i = 0; i < response.records.length; i++) {
+
+                    //     if (response.records[i].fields.city.toUpperCase().includes($("#location-input").val().trim().toUpperCase())) {
+                    //         if (response.records[i].fields.website ===undefined){
+                    //            response.records[i].fields.website = "";}
+                    //        if (response.records[i].fields.name ===undefined){
+                    //            response.records[i].fields.name = "";}
+                    //        if (response.records[i].fields.address1 ===undefined){
+                    //            response.records[i].fields.address1 = "";}
+                    //        if ( response.records[i].fields.city===undefined){
+                    //             response.records[i].fields.city = "";}
+                    //        if ( response.records[i].fields.state===undefined){
+                    //             response.records[i].fields.state = "";}
+                    //         if (response.records[i].fields.cat_name===undefined){
+                    //            response.records[i].fields.cat_name = "";}
+                    //        if (response.records[i].fields.style_name===undefined){
+                    //            response.records[i].fields.style_name = "";}
+                    //         if (response.records[i].fields.descript===undefined){
+                    //        response.records[i].fields.descript = "";
+                    //        }
+                    });
+                // move to results page
+                $("#main-inputs").hide();
+                $("#logo").hide();
+                $("#results").show();
+                });
+                
             });
+
+                 
         });
-});
 
 
-$("#back-button-1").on("click", function (e) {
-    e.preventDefault();
-    $("#location").show();
-    $("#main-inputs").hide();
-});
+
+    $("#back-button-1").on("click", function (e) {
+        e.preventDefault();
+        $("#location").show();
+        $("#main-inputs").hide();
+    })
 
