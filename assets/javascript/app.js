@@ -112,7 +112,7 @@ $("#location-submit").on("click", function (e) {
                         "user-key": zomatoApiKey
                     }
                 }).then(function (responseOne) {
-
+                    
                     var cuisineId;
                     ct = 0;
 
@@ -162,12 +162,14 @@ $("#location-submit").on("click", function (e) {
                 
                 // Ajax Call to OpenBeerDB
                 $.ajax({
-                    url: beerURL, method: "GET"
-                })
+                    url: beerURL,
+                    method: "GET"
+                }).then(function (responseBeer) {
+                    
+                    
+                    console.log(responseBeer);
+                    console.log(responseBeer.records[i].fields.name_breweries);
                 
-                .then(function (response) {
-                    console.log(response)
-                    console.log(response.records);
                     
                     
 
