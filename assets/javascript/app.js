@@ -185,7 +185,8 @@ $("#location-submit").on("click", function (e) {
 
 // Retrieving  restaurantsArray from session storage to do the comparison 
 var restaurantsArray = sessionStorage.getItem('restaurantsArray');
-var responseTwo = sessionStorage.getItem('responseTwo');
+var responseTwo = JSON.parse(sessionStorage.getItem('responseTwo'));
+
 console.log(responseTwo);
 
                 console.log('Second: ' + restaurantsArray);
