@@ -40,12 +40,12 @@ $("#age-submit").on("click", function (e) {
 
 $("#location-submit").on("click", function (e) {
     e.preventDefault();
-    
+
     // gather user input
     userLocation = $("#location-input").val().trim();
     console.log(userLocation);
     googleMapsQueryURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + userLocation + "&key=AIzaSyB8Eim861DFG-C8nD2Z83vXE1Pbv-kHlwM";
-    
+
     // googlemaps API call
     $.ajax({
         url: googleMapsQueryURL,
@@ -103,6 +103,7 @@ $("#location-submit").on("click", function (e) {
                             var restaurantsArray = [];
                             var urlCuisine = '&cuisines=' + cuisineId;
                             var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine;
+                            console.log(queryURL);
 
                             console.log(queryURL);
 
@@ -118,7 +119,11 @@ $("#location-submit").on("click", function (e) {
                                 for (var i = 0; i < responseTwo.restaurants.length; i++) {
                                     restaurantsArray.push(responseTwo.restaurants[i].restaurant.name);
                                 }
-                                console.log(restaurantsArray);
+                                console.log('First: ' + restaurantsArray);
+
+// Storing restaurantsArray in session storage for retrieval later outstde of this scope to do the comparison 
+                                sessionStorage.clear();
+                                sessionStorage.setItem('restaurantsArray', restaurantsArray);
                                 ct = 0;
                             });
                             break;
@@ -130,63 +135,88 @@ $("#location-submit").on("click", function (e) {
                 })
 
                 //this is the search term for beer set up
-              
+
                 beerInput = $("#alcohol-input").val().trim()
-                
+
                 beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&rows=50&sort=name&facet=style_name&facet=cat_name&facet=name_breweries&facet=city&refine.city=" + userLocation;
                 console.log(beerInput);
                 console.log(beerURL);
 
-
-                
                 // Ajax Call to OpenBeerDB
                 $.ajax({
                     url: beerURL, method: "GET"
                 })
-                
-                .then(function (response) {
-                    console.log(response)
-                    console.log(response.records);
-                    
-                    
 
-                    // for (var i = 0; i < response.records.length; i++) {
+                    .then(function (response) {
+                        console.log(response)
+                        console.log(response.records);
 
-                    //     if (response.records[i].fields.city.toUpperCase().includes($("#location-input").val().trim().toUpperCase())) {
-                    //         if (response.records[i].fields.website ===undefined){
-                    //            response.records[i].fields.website = "";}
-                    //        if (response.records[i].fields.name ===undefined){
-                    //            response.records[i].fields.name = "";}
-                    //        if (response.records[i].fields.address1 ===undefined){
-                    //            response.records[i].fields.address1 = "";}
-                    //        if ( response.records[i].fields.city===undefined){
-                    //             response.records[i].fields.city = "";}
-                    //        if ( response.records[i].fields.state===undefined){
-                    //             response.records[i].fields.state = "";}
-                    //         if (response.records[i].fields.cat_name===undefined){
-                    //            response.records[i].fields.cat_name = "";}
-                    //        if (response.records[i].fields.style_name===undefined){
-                    //            response.records[i].fields.style_name = "";}
-                    //         if (response.records[i].fields.descript===undefined){
-                    //        response.records[i].fields.descript = "";
-                    //        }
+
+
+                        // for (var i = 0; i < response.records.length; i++) {
+
+                        //     if (response.records[i].fields.city.toUpperCase().includes($("#location-input").val().trim().toUpperCase())) {
+                        //         if (response.records[i].fields.website ===undefined){
+                        //            response.records[i].fields.website = "";}
+                        //        if (response.records[i].fields.name ===undefined){
+                        //            response.records[i].fields.name = "";}
+                        //        if (response.records[i].fields.address1 ===undefined){
+                        //            response.records[i].fields.address1 = "";}
+                        //        if ( response.records[i].fields.city===undefined){
+                        //             response.records[i].fields.city = "";}
+                        //        if ( response.records[i].fields.state===undefined){
+                        //             response.records[i].fields.state = "";}
+                        //         if (response.records[i].fields.cat_name===undefined){
+                        //            response.records[i].fields.cat_name = "";}
+                        //        if (response.records[i].fields.style_name===undefined){
+                        //            response.records[i].fields.style_name = "";}
+                        //         if (response.records[i].fields.descript===undefined){
+                        //        response.records[i].fields.descript = "";
+                        //        }
                     });
                 // move to results page
                 $("#main-inputs").hide();
                 $("#logo").hide();
                 $("#results").show();
-                });
-                
+
+
+// Retrieving  restaurantsArray from session storage to do the comparison 
+var restaurantsArray = sessionStorage.getItem('restaurantsArray');
+                console.log('Second: ' + restaurantsArray);
+
+ // Placeholder array for your beer array with forced data for testing
+ var sudzyArray = ["Hash Huse a Go Go", "Richard Walker's Pancake House","Hoad's", "Cafe 222,Junier & Ivy", "Barleymash", "The Broken Yolk Cafe - Downtown - Gaslamp", "Snooze,Stdio Diner", "The Mission,Tender Greens"
+ , "Nine-Ten"];
+
+// Checking for commonalities between the two arrays
+var commonArray=[];
+for (var i = 0; i < sudzyArray.length; i++) {
+    if (restaurantsArray.includes(sudzyArray[i])) {
+        commonArray.push(sudzyArray[i]);
+        alert('Hit: ' + sudzyArray[i]);
+    } else {
+        alert('No matches');
+    }
+    console.log('common: ' + commonArray);
+}
+
+
+
+
+
+
             });
 
-                 
         });
 
 
+});
 
-    $("#back-button-1").on("click", function (e) {
-        e.preventDefault();
-        $("#location").show();
-        $("#main-inputs").hide();
-    })
+
+// $("#back-button-1").on("click", function (e) {
+//     e.preventDefault();
+
+
+//     $("#location").show();
+//     $("#main-inputs").hide();
 
