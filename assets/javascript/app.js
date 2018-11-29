@@ -132,7 +132,6 @@ $("#location-submit").on("click", function (e) {
                 //this is the search term for beer set up
               
                 beerInput = $("#alcohol-input").val().trim()
-                
                 beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&rows=50&sort=name&facet=style_name&facet=cat_name&facet=name_breweries&facet=city&refine.city=" + userLocation;
                 console.log(beerInput);
                 console.log(beerURL);
@@ -171,6 +170,7 @@ $("#location-submit").on("click", function (e) {
                     //        response.records[i].fields.descript = "";
                     //        }
                     });
+                    
                 // move to results page
                 $("#main-inputs").hide();
                 $("#logo").hide();
