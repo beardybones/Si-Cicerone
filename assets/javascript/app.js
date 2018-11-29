@@ -42,8 +42,30 @@ $("#location-submit").on("click", function (e) {
     
     // gather user input
     userLocation = $("#location-input").val().trim();
-    console.log(userLocation);
-    googleMapsQueryURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + userLocation + "&key=AIzaSyB8Eim861DFG-C8nD2Z83vXE1Pbv-kHlwM";
+    // .toUpperCase()
+    
+    
+    function titleCase(userLocation) {
+        var splitStr = userLocation.toLowerCase().split(' ');
+        for (var i = 0; i < splitStr.length; i++) {
+            // You do not need to check if i is larger than splitStr length, as your for does that for you
+            // Assign it back to the array
+            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+        }
+        // Directly return the joined string
+        return splitStr.join(' '); 
+     }
+     console.log(titleCase(userLocation));
+     
+    // userLocation = userLocation.toUpperCase();
+    
+    // for (var i = 0; i < response.records.length; i++) {
+
+    //     if (response.records[i].fields.city.toUpperCase().includes($("#location-input").val().trim().toUpperCase()))
+    // }
+
+    
+    googleMapsQueryURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + titleCase(userLocation) + "&key=AIzaSyB8Eim861DFG-C8nD2Z83vXE1Pbv-kHlwM";
     
     // googlemaps API call
     $.ajax({
@@ -132,7 +154,7 @@ $("#location-submit").on("click", function (e) {
               
                 beerInput = $("#alcohol-input").val().trim()
                 
-                beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&rows=50&sort=name&facet=style_name&facet=cat_name&facet=name_breweries&facet=city&refine.city=" + userLocation;
+                beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&rows=50&sort=name&facet=style_name&facet=cat_name&facet=name_breweries&facet=city&refine.city=" + titleCase(userLocation);
                 console.log(beerInput);
                 console.log(beerURL);
 
