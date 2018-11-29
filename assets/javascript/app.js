@@ -66,7 +66,7 @@ $("#location-submit").on("click", function (e) {
             $("#location").hide();
             $("#main-inputs").show();
 
-
+        });
             // Added code for an input-submit...Chord review...
             // On Submit builds the two urls required for the Zomato ajax calls
             $('#input-submit').on('click', function (e) {
@@ -120,11 +120,9 @@ $("#location-submit").on("click", function (e) {
                                     restaurantsArray.push(responseTwo.restaurants[i].restaurant.name);
                                 }
                                 console.log('First: ' + restaurantsArray);
-    
                                 
+                                // Storing restaurantsArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
 
-// Storing restaurantsArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
-                                sessionStorage.clear();
                                 sessionStorage.setItem('restaurantsArray', restaurantsArray);
                                 sessionStorage.setItem('responseTwo', JSON.stringify(responseTwo));
                                 ct = 0;
@@ -151,81 +149,79 @@ $("#location-submit").on("click", function (e) {
                 })
 
                     .then(function (response) {
-                        console.log(response)
-                        console.log(response.records);
+                        var sudzyArray = [];
+                        console.log(response);
+                        for (var i = 0; i < response.records.length; i++) {
+                            sudzyArray.push(response.records[i].fields.name_breweries);
+                        }
+                        console.log('First: ' + sudzyArray);
 
-
-
-                        // for (var i = 0; i < response.records.length; i++) {
-
-                        //     if (response.records[i].fields.city.toUpperCase().includes($("#location-input").val().trim().toUpperCase())) {
-                        //         if (response.records[i].fields.website ===undefined){
-                        //            response.records[i].fields.website = "";}
-                        //        if (response.records[i].fields.name ===undefined){
-                        //            response.records[i].fields.name = "";}
-                        //        if (response.records[i].fields.address1 ===undefined){
-                        //            response.records[i].fields.address1 = "";}
-                        //        if ( response.records[i].fields.city===undefined){
-                        //             response.records[i].fields.city = "";}
-                        //        if ( response.records[i].fields.state===undefined){
-                        //             response.records[i].fields.state = "";}
-                        //         if (response.records[i].fields.cat_name===undefined){
-                        //            response.records[i].fields.cat_name = "";}
-                        //        if (response.records[i].fields.style_name===undefined){
-                        //            response.records[i].fields.style_name = "";}
-                        //         if (response.records[i].fields.descript===undefined){
-                        //        response.records[i].fields.descript = "";
-                        //        }
+                        // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
+                        sessionStorage.setItem('sudzyArray', sudzyArray);
+                        ct = 0;
                     });
-                // move to results page
-                $("#main-inputs").hide();
-                $("#logo").hide();
-                $("#results").show();
 
 
-// Retrieving  restaurantsArray from session storage to do the comparison 
-var restaurantsArray = sessionStorage.getItem('restaurantsArray');
-var responseTwo = JSON.parse(sessionStorage.getItem('responseTwo'));
+                // for (var i = 0; i < response.records.length; i++) {
 
-console.log(responseTwo);
-
-                console.log('Second: ' + restaurantsArray);
-
- // Placeholder array for your beer array with forced data for testing
- var sudzyArray = ["Hash Huse a Go Go", "Richard Walker's Pancake House","Hoad's", "Cafe 222,Junier & Ivy", "Barleymash", "The Broken Yolk Cafe - Downtown - Gaslamp", "Snooze,Stdio Diner", "The Mission,Tender Greens"
- , "Nine-Ten"];
-
-// Checking for commonalities between the two arrays
-var commonArray=[];
-for (var i = 0; i < sudzyArray.length; i++) {
-    if (restaurantsArray.includes(sudzyArray[i])) {
-        commonArray.push(sudzyArray[i]);
-        alert('Hit: ' + sudzyArray[i]);
-    } else {
-        alert('No matches');
-    }
-    console.log('common: ' + commonArray);
-    sessionStorage.setItem('commonArray', commonArray);
-
-}
-
-
-
-
-
-
-            });
-
+                //     if (response.records[i].fields.city.toUpperCase().includes($("#location-input").val().trim().toUpperCase())) {
+                //         if (response.records[i].fields.website ===undefined){
+                //            response.records[i].fields.website = "";}
+                //        if (response.records[i].fields.name ===undefined){
+                //            response.records[i].fields.name = "";}
+                //        if (response.records[i].fields.address1 ===undefined){
+                //            response.records[i].fields.address1 = "";}
+                //        if ( response.records[i].fields.city===undefined){
+                //             response.records[i].fields.city = "";}
+                //        if ( response.records[i].fields.state===undefined){
+                //             response.records[i].fields.state = "";}
+                //         if (response.records[i].fields.cat_name===undefined){
+                //            response.records[i].fields.cat_name = "";}
+                //        if (response.records[i].fields.style_name===undefined){
+                //            response.records[i].fields.style_name = "";}
+                //         if (response.records[i].fields.descript===undefined){
+                //        response.records[i].fields.descript = "";
+                //        }
+           
+            // move to results page
+            $("#main-inputs").hide();
+            $("#logo").hide();
+            $("#results").show();
         });
 
+            // Retrieving  restaurantsArray from session storage to do the comparison 
+            //         var restaurantsArray = sessionStorage.getItem('restaurantsArray');
+            //         var responseTwo = JSON.parse(sessionStorage.getItem('responseTwo'));
 
-});
+            //         console.log(responseTwo);
+
+            //         console.log('Second: ' + restaurantsArray);
+
+            //         // Placeholder array for your beer array with forced data for testing
+            //         var sudzyArray = sessionStorage.getItem('sudzyArray');
+
+            //         // Checking for commonalities between the two arrays
+            //         var commonArray = [];
+            //         for (var i = 0; i < sudzyArray.length; i++) {
+            //             if (restaurantsArray.includes(sudzyArray[i])) {
+            //                 commonArray.push(sudzyArray[i]);
+            //                 alert('Hit: ' + sudzyArray[i]);
+            //             } 
+            //             console.log('common: ' + commonArray);
+            //             sessionStorage.setItem('commonArray', commonArray);
+            //         }
+            //     });
+    
+
+    // $("#back-button-1").on("click", function (e) {
+    //     e.preventDefault();
 
 
-// $("#back-button-1").on("click", function (e) {
-//     e.preventDefault();
+    //     $("#location").show();
+    //     $("#main-inputs").hide();
+    // });
 
 
-//     $("#location").show();
-//     $("#main-inputs").hide();
-
+    // ------------------------    
+});//end of code
+// ------------------------
