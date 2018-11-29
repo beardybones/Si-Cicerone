@@ -120,10 +120,13 @@ $("#location-submit").on("click", function (e) {
                                     restaurantsArray.push(responseTwo.restaurants[i].restaurant.name);
                                 }
                                 console.log('First: ' + restaurantsArray);
+    
+                                
 
-// Storing restaurantsArray in session storage for retrieval later outstde of this scope to do the comparison 
+// Storing restaurantsArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
                                 sessionStorage.clear();
                                 sessionStorage.setItem('restaurantsArray', restaurantsArray);
+                                sessionStorage.setItem('responseTwo', JSON.stringify(responseTwo));
                                 ct = 0;
                             });
                             break;
@@ -182,6 +185,9 @@ $("#location-submit").on("click", function (e) {
 
 // Retrieving  restaurantsArray from session storage to do the comparison 
 var restaurantsArray = sessionStorage.getItem('restaurantsArray');
+var responseTwo = sessionStorage.getItem('responseTwo');
+console.log(responseTwo);
+
                 console.log('Second: ' + restaurantsArray);
 
  // Placeholder array for your beer array with forced data for testing
@@ -198,6 +204,8 @@ for (var i = 0; i < sudzyArray.length; i++) {
         alert('No matches');
     }
     console.log('common: ' + commonArray);
+    sessionStorage.setItem('commonArray', commonArray);
+
 }
 
 
