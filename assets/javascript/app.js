@@ -1,3 +1,5 @@
+
+// initialize web page
 $("#location").hide();
 $("#main-inputs").hide();
 $("#results").hide();
@@ -14,9 +16,6 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
-$("#inputAge").submit(function (e) {
-    e.preventDefault();
-});
 
 $("#age-submit").on("click", function (e) {
     e.preventDefault();
@@ -27,46 +26,35 @@ $("#age-submit").on("click", function (e) {
 
 
     if (diffAge > 21) {
-
-
         // hide the age input and show the location input
         $("#header").hide();
         $("#location").show();
-    } else {
+    }
+    // if the age is < 21 alert the user and send them away!
+
+    else {
         alert("You are not old Enough Goodbye!");
         window.location.href = "http://www.nick.com"
     }
-    // if the age is < 21 alert the user and do nothing
 })
 
 $("#location-submit").on("click", function (e) {
     e.preventDefault();
-/////NEW ADD ME///
-    searchTerm = "";
-
-    input = $("#location-input").val().trim()
-
-    input = input.split(" ")
-
-    for (var i = 0; i < input.length; i++) {
-        searchTerm = searchTerm + "+" + input[i]
-    }
-
-    searchTerm = searchTerm.substring(1, searchTerm.length)
-    console.log(searchTerm)
-    console.log(queryURL)
-/////NEW ADD ME///
-
+    
     // gather user input
     userLocation = $("#location-input").val().trim();
+    console.log(userLocation);
     googleMapsQueryURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + userLocation + "&key=AIzaSyB8Eim861DFG-C8nD2Z83vXE1Pbv-kHlwM";
-
+    
+    // googlemaps API call
     $.ajax({
         url: googleMapsQueryURL,
         method: "GET"
     })
 
         .then(function (response) {
+
+            // store the longitude and lattitude
             userLng = response.results[0].geometry.location.lng;
             userLat = response.results[0].geometry.location.lat;
 
@@ -84,12 +72,14 @@ $("#location-submit").on("click", function (e) {
             $('#input-submit').on('click', function (e) {
                 e.preventDefault();
                 cuisineInput = $('#food-input').val().trim();
-                radiusMeters = 25000;
+
+                // cuisineIput to be populated by #food-input
+                radiusMeters = 8000;
                 zomatoApiKey = '7fd9b4ff24a0fa2eae39b02482c2e9b1';
                 urlOne = 'https://developers.zomato.com/api/v2.1/cuisines?';
                 urlTwo = 'https://developers.zomato.com/api/v2.1/search?';
                 urlRadius = '&radius=' + radiusMeters;
-
+                cuisineUrl = urlOne + urlLat + urlLon
 
                 // Ajax call to Zomato to gather cuisine object for the lat/long coordinates
                 cuisineUrl = urlOne + urlLat + urlLon
@@ -103,7 +93,7 @@ $("#location-submit").on("click", function (e) {
                 }).then(function (responseOne) {
 
                     var cuisineId;
-                    var ct = 0;
+                    ct = 0;
 
                     for (var i = 0; i < responseOne.cuisines.length; i++) {
                         ct++;
@@ -115,6 +105,7 @@ $("#location-submit").on("click", function (e) {
                             var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine;
                             console.log(queryURL);
 
+                            console.log(queryURL);
 
                             // ajax call to Zomato to get restaurants based on location and cuisine and build restaurant name array for comparison with open beer databasd
                             $.ajax({
@@ -138,44 +129,74 @@ $("#location-submit").on("click", function (e) {
                         }
                     }
                 })
-  //this is the search term for beer set up
-    beerSearch = "";
 
-    beerInput = $("#alcohol-input").val().trim()
-
-    beerInput = beerInput.split(" ")
-
-    for (var i = 0; i < beerInput.length; i++) {
-        beerSearch = beerSearch + "+" + beerInput[i]
-    }
-    beerSearch = beerSearch.substring(1, beerSearch.length)
-    beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerSearch + "+" + searchTerm + "&rows=150&facet=style_name&facet=cat_name&facet=city&facet=country"
-    console.log(beerSearch)
-    console.log(beerURL)
-/////NEW ADD ME///
-//this is the start of my ajax call searching keywords of beers and cities
-    $.ajax({
-        url: beerURL, method: "GET"
-    }).then(function (response) {
-        console.log(response)
-        console.log(response.records);
-       
-
-        for (var i = 0; i < response.records.length; i++) {
-
-            console.log(response.records[i].fields.name + "<br>" + response.records[i].fields.address1 + "  " + response.records[i].fields.city + "  " + response.records[i].fields.state + "<br>" + response.records[i].fields.cat_name + "  " + response.records[i].fields.style_name + "<br><a id='id5' name='link' href='" + response.records[i].fields.website + "'>" + response.records[i].fields.website + "</a><br>" + response.records[i].fields.descript + "<br><br><br>")
+                //this is the search term for beer set up
+              
+                beerInput = $("#alcohol-input").val().trim()
+                
+                beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&rows=50&sort=name&facet=style_name&facet=cat_name&facet=name_breweries&facet=city&refine.city=" + userLocation;
+                console.log(beerInput);
+                console.log(beerURL);
 
 
-        }
+                
+                // Ajax Call to OpenBeerDB
+                $.ajax({
+                    url: beerURL, method: "GET"
+                })
+                
+                .then(function (response) {
+                    console.log(response)
+                    console.log(response.records);
+                    
+                    
+
+                    // for (var i = 0; i < response.records.length; i++) {
+
+                    //     if (response.records[i].fields.city.toUpperCase().includes($("#location-input").val().trim().toUpperCase())) {
+                    //         if (response.records[i].fields.website ===undefined){
+                    //            response.records[i].fields.website = "";}
+                    //        if (response.records[i].fields.name ===undefined){
+                    //            response.records[i].fields.name = "";}
+                    //        if (response.records[i].fields.address1 ===undefined){
+                    //            response.records[i].fields.address1 = "";}
+                    //        if ( response.records[i].fields.city===undefined){
+                    //             response.records[i].fields.city = "";}
+                    //        if ( response.records[i].fields.state===undefined){
+                    //             response.records[i].fields.state = "";}
+                    //         if (response.records[i].fields.cat_name===undefined){
+                    //            response.records[i].fields.cat_name = "";}
+                    //        if (response.records[i].fields.style_name===undefined){
+                    //            response.records[i].fields.style_name = "";}
+                    //         if (response.records[i].fields.descript===undefined){
+                    //        response.records[i].fields.descript = "";
+                    //        }
+                    });
+                // move to results page
+                $("#main-inputs").hide();
+                $("#logo").hide();
+                $("#results").show();
+                });
+                
             });
+
+                 
         });
-});
 
 
+<<<<<<< HEAD
 // $("#back-button-1").on("click", function (e) {
 //     e.preventDefault();
 
 
 //     $("#location").show();
 //     $("#main-inputs").hide();
+=======
+
+    $("#back-button-1").on("click", function (e) {
+        e.preventDefault();
+        $("#location").show();
+        $("#main-inputs").hide();
+    })
+>>>>>>> 0da06278f9c99eefb9b60f977d25b72affa389f7
 
