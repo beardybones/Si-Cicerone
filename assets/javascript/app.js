@@ -113,6 +113,7 @@ $("#location-submit").on("click", function (e) {
                             var restaurantsArray = [];
                             var urlCuisine = '&cuisines=' + cuisineId;
                             var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine;
+                            console.log(queryURL);
 
 
                             // ajax call to Zomato to get restaurants based on location and cuisine and build restaurant name array for comparison with open beer databasd
@@ -171,10 +172,10 @@ $("#location-submit").on("click", function (e) {
 });
 
 
-]$("#back-button-1").on("click", function (e) {
-    e.preventDefault();
+// $("#back-button-1").on("click", function (e) {
+//     e.preventDefault();
 
 
-    $("#location").show();
-    $("#main-inputs").hide();
+//     $("#location").show();
+//     $("#main-inputs").hide();
 
