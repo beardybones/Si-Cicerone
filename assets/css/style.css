@@ -18,16 +18,17 @@ body{
 }
 
 .mostRecentSearch {
-    margin: 30px;
+    margin-left:80%;
     background-color:white;
-    border: 1px solid black;
-    opacity: 0.6;
+    border: 2px solid black;
+    opacity: 0.5;
     filter: alpha(opacity=60);
-    float: right;
+    border-radius: 5px 5px 5px 5px;
+   
     
 }
 #location-display {
-    margin: 2%;
+    
     font-weight: bold;
     color: #000000;
 }
@@ -37,13 +38,12 @@ body{
     color: #000000;
 }
 #food-display {
-    margin: 2%;
+   
     font-weight: bold;
     color: #000000;
 }
 #titleRecent {
 
-    margin: 2%;
     font-weight: bold;
     color: #000000;
     border-bottom: black solid;
