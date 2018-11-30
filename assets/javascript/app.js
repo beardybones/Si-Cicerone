@@ -17,24 +17,6 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 
-function restaurantInfo() {
-    var restaurantName = responseTwo.restaurants[j].restaurant.name;
-    var menuUrl = responseTwo.restaurants[j].restaurant.menu_url;
-    var address = responseTwo.restaurants[j].restaurant.location.address;
-    var featureImg = responseTwo.restaurants[j].restaurant.featured_image;
-    var restaurantCuisine = responseTwo.restaurants[j].restaurant.cuisines;
-    var userRating = responseTwo.restaurants[j].restaurant.user_rating.aggregate_rating;
-}
-
-function printNewRestaurant(){
-    $("#card-results").append("<div class='card w-50 m-4 mx-auto'>" + "<img class='card-img-top' src='" + featureImg +
-        "' /> <td class='train-destination'> " + snapshot.val().destination +
-        " </td><td class='train-arrival'> " +   moment(trainArrival).format("hh:mm") +
-        " </td><td class='train-frequency'> " + snapshot.val().trainFrequency +
-        " </td><td class='train-frequency'> " + tMinutesTillTrain +
-        " </td></tbody>");
-}
-
 $("#age-submit").on("click", function (e) {
     e.preventDefault();
     // if userAge > 21 verify user
@@ -177,12 +159,27 @@ $("#location-submit").on("click", function (e) {
                                 }
                                 sessionStorage.setItem('commonArray', commonArray);
                             }
+                            
+
                             var zomatoCall = JSON.parse(sessionStorage.getItem('zomatoCall'));
+                            var testArray = ["Juniper & Ivy", "Cafe 222"]
                             for (var j = 0; j < zomatoCall.restaurants.length; j++) {
-                                for (var k = 0; k < commonArray.length; k++) {
-                                    if (zomatoCall.restaurants[j].restaurant.name === commonArray[k]) {
-                                        console.log(zomatoCall.restaurants[j].restaurant.name);
-                                        restaurantInfo();
+                                for (var k = 0; k < testArray.length; k++) {
+                                    if (zomatoCall.restaurants[j].restaurant.name == testArray[k]) {
+                                        var restaurantName = zomatoCall.restaurants[j].restaurant.name;
+                                        var menuUrl = zomatoCall.restaurants[j].restaurant.menu_url;
+                                        var address = zomatoCall.restaurants[j].restaurant.location.address;
+                                        var featureImg = zomatoCall.restaurants[j].restaurant.featured_image;
+                                        var restaurantCuisine = zomatoCall.restaurants[j].restaurant.cuisines;
+                                        var userRating = zomatoCall.restaurants[j].restaurant.user_rating.aggregate_rating;
+                                        $("#card-results").append("<div class='card w-50 m-4 mx-auto'>" + "<img class='card-img-top' src='" + featureImg +
+                                    "' /> <div class='card-body'><h5 class='card-title'>" + restaurantName + 
+                                    "</h5><span>Cuisine: " + restaurantCuisine +
+                                    "</span><br><a href='" + menuUrl +
+                                    "'<i class='fas fa-utensils'>Menu</i></a><br><small>" + address +
+                                    "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
+                                    "</i></small></div></div>"
+                                    );
                                     }
                                 }
                             }
