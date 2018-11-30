@@ -52,7 +52,6 @@ $("#location-submit").on("click", function (e) {
         // Directly return the joined string
         return splitStr.join(' ');
     };
-    console.log(titleCase(userLocation));
     googleMapsQueryURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + titleCase(userLocation) + "&key=AIzaSyB8Eim861DFG-C8nD2Z83vXE1Pbv-kHlwM";
 
     // googlemaps API call
@@ -112,6 +111,8 @@ $("#location-submit").on("click", function (e) {
                     cuisineId = responseOne.cuisines[i].cuisine.cuisine_id;
                     var restaurantsArray = [];
                     var urlCuisine = '&cuisines=' + cuisineId;
+                    var urlLocality = '&locality=' + userLocation;
+                    var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine + urlLocality;
                     var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine + "&sort=real_distance&order=desc";
 
                     // ajax call to Zomato to get restaurants based on location and cuisine and build restaurant name array for comparison with open beer databasd
@@ -122,15 +123,13 @@ $("#location-submit").on("click", function (e) {
                             "user-key": zomatoApiKey
                         }
                     }).then(function (responseTwo) {
-                        console.log(responseTwo);
                         for (var i = 0; i < responseTwo.restaurants.length; i++) {
                             restaurantsArray.push(responseTwo.restaurants[i].restaurant.name);
                         }
-                        console.log('First: ' + restaurantsArray);
                         // Storing restaurantsArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
 
                         sessionStorage.setItem('restaurantsArray', JSON.stringify(restaurantsArray));
-                        sessionStorage.setItem('responseTwo', JSON.stringify(responseTwo));
+                        sessionStorage.setItem('zomatoCall', JSON.stringify(responseTwo));
                         ct = 0;
                         // Ajax Call to OpenBeerDB
                         //this is the search term for beer set up
@@ -142,40 +141,52 @@ $("#location-submit").on("click", function (e) {
                             url: beerURL, method: "GET"
                         }).then(function (response) {
                             var sudzyArray = [];
-                            console.log(response);
                             for (var i = 0; i < response.records.length; i++) {
                                 sudzyArray.push(response.records[i].fields.name_breweries);
                             }
-                            console.log(sudzyArray);
                             // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
                             sessionStorage.setItem('sudzyArray', JSON.stringify(sudzyArray));
                             ct = 0;
                             // Retrieving  arrays from session storage to do the comparison 
                             var restaurantsArray = JSON.parse(sessionStorage.getItem('restaurantsArray'));
-                            var responseTwo = JSON.parse(sessionStorage.getItem('responseTwo'));
                             var sudzyArray = JSON.parse(sessionStorage.getItem('sudzyArray'));
                             // console.log(restaurantsArray);
-                            console.log(restaurantsArray);
                             // Checking for commonalities between the two arrays
                             var commonArray = [];
                             for (var i = 0; i < sudzyArray.length; i++) {
                                 if (restaurantsArray.includes(sudzyArray[i])) {
-                                    commonArray.push(sudzyArray[i]);    
+                                    commonArray.push(sudzyArray[i]);
                                     // alert('Hit: ' + sudzyArray[i]);
                                 }
-                                console.log('common: ' + commonArray);
                                 sessionStorage.setItem('commonArray', commonArray);
                             }
-                            console.log(commonArray);
+                            
 
-                            // move to results page
-                            $("#main-inputs").hide();
-                            $("#logo").hide();
-                            $("#results").show();
+                            var zomatoCall = JSON.parse(sessionStorage.getItem('zomatoCall'));
+                            for (var j = 0; j < zomatoCall.restaurants.length; j++) {
+                                for (var k = 0; k < commonArray.length; k++) {
+                                    if (zomatoCall.restaurants[j].restaurant.name == commonArray[k]) {
+                                        var restaurantName = zomatoCall.restaurants[j].restaurant.name;
+                                        var menuUrl = zomatoCall.restaurants[j].restaurant.menu_url;
+                                        var address = zomatoCall.restaurants[j].restaurant.location.address;
+                                        var featureImg = zomatoCall.restaurants[j].restaurant.featured_image;
+                                        var restaurantCuisine = zomatoCall.restaurants[j].restaurant.cuisines;
+                                        var userRating = zomatoCall.restaurants[j].restaurant.user_rating.aggregate_rating;
+                                        $("#card-results").append("<div class='card w-50 m-4 mx-auto'>" + "<img class='card-img-top' src='" + featureImg +
+                                    "' /> <div class='card-body'><h5 class='card-title'>" + restaurantName + 
+                                    "</h5><span>Cuisine: " + restaurantCuisine +
+                                    "</span><br><a href='" + menuUrl +
+                                    "'<i class='fas fa-utensils'>Menu</i></a><br><small>" + address +
+                                    "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
+                                    "</i></small></div></div>"
+                                    );
+                                    }
+                                }
+                            }
                         });
 
-
                     });
+
                     break;
                 } else if (ct >= responseOne.cuisines.length) {
                     alert("nothing found");
@@ -185,20 +196,26 @@ $("#location-submit").on("click", function (e) {
         })
 
 
-
-
+        // move to results page
+        $("#main-inputs").hide();
+        $("#logo").hide();
+        $("#results").show();
     });
-
 });
 
 
 $("#back-button-1").on("click", function (e) {
     e.preventDefault();
-
-
     $("#location").show();
     $("#main-inputs").hide();
 });
+
+$("#back-button-2").on("click", function (e) {
+    e.preventDefault();
+    $("#main-inputs").show();
+    $("#logo").show();
+    $("#results").hide();
+})
 
 // ------------------------    
 //end of code
