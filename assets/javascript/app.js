@@ -71,6 +71,8 @@ $("#location-submit").on("click", function (e) {
             urlLat = 'lat=' + userLat;
             urlLon = '&lon=' + userLng;
 
+            console.log(urlLat, urlLon);
+
             // move to next screen
             $("#location").hide();
             $("#main-inputs").show();
@@ -83,16 +85,15 @@ $("#location-submit").on("click", function (e) {
         cuisineInput = $('#food-input').val().trim();
 
         // cuisineIput to be populated by #food-input
-        radiusMeters = 8000;
+        radiusMeters = 1000;
         zomatoApiKey = '7fd9b4ff24a0fa2eae39b02482c2e9b1';
         urlOne = 'https://developers.zomato.com/api/v2.1/cuisines?';
         urlTwo = 'https://developers.zomato.com/api/v2.1/search?';
         urlRadius = '&radius=' + radiusMeters;
-        cuisineUrl = urlOne + urlLat + urlLon
 
         // Ajax call to Zomato to gather cuisine object for the lat/long coordinates
-        cuisineUrl = urlOne + urlLat + urlLon
-        // console.log(cuisineUrl);
+        cuisineUrl = urlOne + urlLat + urlLon;
+        console.log(cuisineUrl);
         $.ajax({
             url: cuisineUrl,
             method: "GET",
@@ -111,7 +112,7 @@ $("#location-submit").on("click", function (e) {
                     cuisineId = responseOne.cuisines[i].cuisine.cuisine_id;
                     var restaurantsArray = [];
                     var urlCuisine = '&cuisines=' + cuisineId;
-                    var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine;
+                    var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine + "&sort=real_distance&order=desc";
 
                     // ajax call to Zomato to get restaurants based on location and cuisine and build restaurant name array for comparison with open beer databasd
                     $.ajax({
