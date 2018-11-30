@@ -1,21 +1,151 @@
 
+
+
+
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAhTmmpStfimrjJ5ecnpzrkasnHC9dZG58",
+    authDomain: "si-project-12ec9.firebaseapp.com",
+    databaseURL: "https://si-project-12ec9.firebaseio.com",
+    projectId: "si-project-12ec9",
+    storageBucket: "si-project-12ec9.appspot.com",
+    messagingSenderId: "298658243833"
+  };
+  firebase.initializeApp(config);
+var database = firebase.database();
+
+
+ 
+
+$("#age-submit").on("click", function () {
+    var input = $("#inputAge").val()
+    firebase.database().ref('age/').push(input);
+})
+$("#location-submit").on("click", function () {
+    var input = $("#location-input").val()
+    firebase.database().ref('location/').push(input);
+})
+$("#input-submit").on("click", function () {
+    var input = $("#alcohol-input").val()
+    firebase.database().ref('alcohol/').push(input);
+})
+$("#input-submit").on("click", function () {
+    var input = $("#food-input").val()
+    firebase.database().ref('food/').push(input);
+})
+
+
+
+        //setting data in new place to show the last thing that was searched
+$("#age-submit").on("click", function () {
+    var input = $("#inputAge").val()
+    firebase.database().ref('ageLast/').set(input);
+})
+$("#location-submit").on("click", function () {
+    var location = $("#location-input").val()
+    var locationSearch = {
+     location: location,
+   };
+   // var input = $("#location-input").val()
+    firebase.database().ref('locationLast/').set(locationSearch);
+})
+$("#input-submit").on("click", function () {
+    var input = $("#alcohol-input").val()
+    firebase.database().ref('alcoholLast/').set(input);
+})
+$("#input-submit").on("click", function () {
+    var input = $("#food-input").val()
+    firebase.database().ref('foodLast/').set(input);
+})
+
+
+            //showing last this searched
+            // foodLast.on("value", function(snap) {
+
+            //     $("#food-display").text(snap);
+            //   });
+    // var foodLast = firebase.database().ref('foodLast/')
+    // console.log(foodLast);
+            
+    database.ref().on("value", function(childSnapshot) {
+        console.log(childSnapshot.val());
+      
+        // Store everything into a variable.
+        var locationSearch = childSnapshot.val().location;
+ 
+        // Employee Info
+        console.log(locationSearch);
+        
+      
+
+        // var newRow = $("<tr>").append(
+        //   $("<td>").text(empName),
+        //   $("<td>").text(empRole),
+        //   $("<td>").text(empStart),
+        //   $("<td>").text(empMonths),
+        //   $("<td>").text(empRate),
+        //   $("<td>").text(empBilled)
+        // );
+      
+        // Append the new row to the table
+        $("#location-display").text(locationSearch);
+      });
+           
+
+
+
+
+
+
+
+
 // initialize web page
 $("#location").hide();
 $("#main-inputs").hide();
 $("#results").hide();
 
-// Initialize Firebase
-var config = {
-    apiKey: "AIzaSyCw8CMoohclCbxF8SSg1xOOiGtoYrue4iI",
-    authDomain: "si-cicerone.firebaseapp.com",
-    databaseURL: "https://si-cicerone.firebaseio.com",
-    projectId: "si-cicerone",
-    storageBucket: "si-cicerone.appspot.com",
-    messagingSenderId: "993727244007"
-};
-firebase.initializeApp(config);
-var database = firebase.database();
+//this is new username password stuff
+// const auth = firebase.auth();
+// auth.signInWithEmailAndPassword(email, pass);
+// auth.createUserWithEmailAndPassword(email, pass);    
+// auth.onAuthStateChanged(firebaseUser => { });
 
+//                 //get elements from the dom
+// const txtEmail = document.getElementById('txtEmail');
+// const txtPassword = document.getElementById('txtPassword');
+// const btnLogin = document.getElementById('btnLogin');
+// const btnSignUp = document.getElementById('btnSignUp');
+// const btnLogout = document.getElementById('btnLogout');
+
+//             //add login event 
+//     btnLogin.addEventListener('click', e=>{
+//                 //get email and pass
+//         const email = txtEmail.val();
+//         const pass = txtPassword.val();
+//         const auth = firebase.auth();
+//                 //sign in
+//         const promise = auth.signInWithEmailAndPassword(email, pass);
+//         promise.catch(e => console.log(e.message));
+
+
+//     })
+
+
+
+
+
+//this is the end of new password stuff
+
+
+
+
+
+
+checkDataFunction= function(){
+
+
+}
 
 $("#age-submit").on("click", function (e) {
     e.preventDefault();
