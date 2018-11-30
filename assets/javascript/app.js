@@ -204,27 +204,27 @@ $("#location-submit").on("click", function (e) {
 });
 
     // Retrieving  restaurantsArray from session storage to do the comparison 
-    //         var restaurantsArray = sessionStorage.getItem('restaurantsArray');
-    //         var responseTwo = JSON.parse(sessionStorage.getItem('responseTwo'));
+            var restaurantsArray = sessionStorage.getItem('restaurantsArray');
+            var responseTwo = JSON.parse(sessionStorage.getItem('responseTwo'));
 
-    //         console.log(responseTwo);
+            console.log(responseTwo);
 
-    //         console.log('Second: ' + restaurantsArray);
+            console.log('Second: ' + restaurantsArray);
 
-    //         // Placeholder array for your beer array with forced data for testing
-    //         var sudzyArray = sessionStorage.getItem('sudzyArray');
+            // Placeholder array for your beer array with forced data for testing
+            var sudzyArray = sessionStorage.getItem('sudzyArray');
 
-    //         // Checking for commonalities between the two arrays
-    //         var commonArray = [];
-    //         for (var i = 0; i < sudzyArray.length; i++) {
-    //             if (restaurantsArray.includes(sudzyArray[i])) {
-    //                 commonArray.push(sudzyArray[i]);
-    //                 alert('Hit: ' + sudzyArray[i]);
-    //             } 
-    //             console.log('common: ' + commonArray);
-    //             sessionStorage.setItem('commonArray', commonArray);
-    //         }
-    //     });
+            // Checking for commonalities between the two arrays
+            var commonArray = [];
+            for (var i = 0; i < sudzyArray.length; i++) {
+                if (restaurantsArray.includes(sudzyArray[i])) {
+                    commonArray.push(sudzyArray[i]);
+                    alert('Hit: ' + sudzyArray[i]);
+                } 
+                console.log('common: ' + commonArray);
+                sessionStorage.setItem('commonArray', commonArray);
+            }
+        });
 
 
     // $("#back-button-1").on("click", function (e) {
