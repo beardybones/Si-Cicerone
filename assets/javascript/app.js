@@ -201,7 +201,6 @@ $("#location-submit").on("click", function (e) {
 
 });
 
-<<<<<<< HEAD
     // Retrieving  restaurantsArray from session storage to do the comparison 
             var restaurantsArray = sessionStorage.getItem('restaurantsArray');
             var responseTwo = JSON.parse(sessionStorage.getItem('responseTwo'));
@@ -228,8 +227,6 @@ $("#location-submit").on("click", function (e) {
 
     // $("#back-button-1").on("click", function (e) {
     //     e.preventDefault();
-=======
->>>>>>> d9da6b57a17532d1af94f04984fc3f3222bf5608
 
 $("#back-button-1").on("click", function (e) {
     e.preventDefault();
