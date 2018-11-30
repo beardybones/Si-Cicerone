@@ -77,12 +77,13 @@ $("#location-submit").on("click", function (e) {
             $("#main-inputs").show();
 
         });
-    // Added code for an input-submit...Chord review...
+
+
+
     // On Submit builds the two urls required for the Zomato ajax calls
     $('#input-submit').on('click', function (e) {
         e.preventDefault();
         cuisineInput = $('#food-input').val().trim();
-
         // cuisineIput to be populated by #food-input
         radiusMeters = 1000;
         zomatoApiKey = '7fd9b4ff24a0fa2eae39b02482c2e9b1';
@@ -135,7 +136,6 @@ $("#location-submit").on("click", function (e) {
                         //this is the search term for beer set up
 
                         beerInput = $("#alcohol-input").val().trim()
-
                         beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&facet=style_name&facet=cat_name&facet=name_breweries&facet=country&facet=city&refine.country=United+States&refine.city=" + userLocation;
                         $.ajax({
                             url: beerURL, method: "GET"
@@ -160,9 +160,26 @@ $("#location-submit").on("click", function (e) {
                                 }
                                 sessionStorage.setItem('commonArray', commonArray);
                             }
-                            
-
                             var zomatoCall = JSON.parse(sessionStorage.getItem('zomatoCall'));
+                            if(commonArray === undefined || commonArray.length == 0){
+                                console.log(commonArray);
+                                $("#card-results").empty();
+                                for (var l = 0; l < 5; l++) {
+                                    var restaurantName = zomatoCall.restaurants[l].restaurant.name;
+                                    var menuUrl = zomatoCall.restaurants[l].restaurant.menu_url;
+                                    var address = zomatoCall.restaurants[l].restaurant.location.address;
+                                    var featureImg = zomatoCall.restaurants[l].restaurant.featured_image;
+                                    var restaurantCuisine = zomatoCall.restaurants[l].restaurant.cuisines;
+                                    var userRating = zomatoCall.restaurants[l].restaurant.user_rating.aggregate_rating;
+                                    $("#card-results").append("<div class='card w-50 m-4 mx-auto'>" + "<img class='card-img-top' src='" + featureImg +
+                                        "' /> <div class='card-body'><h5 class='card-title'>" + restaurantName +
+                                        "</h5><span>Cuisine: " + restaurantCuisine +
+                                        "</span><br><a href='" + menuUrl +
+                                        "'<i class='fas fa-utensils'> Menu</i></a><br><small>" + address +
+                                        "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
+                                        "</i></small></div></div>")
+                                }
+                            }else{
                             for (var j = 0; j < zomatoCall.restaurants.length; j++) {
                                 for (var k = 0; k < commonArray.length; k++) {
                                     if (zomatoCall.restaurants[j].restaurant.name == commonArray[k]) {
@@ -173,16 +190,17 @@ $("#location-submit").on("click", function (e) {
                                         var restaurantCuisine = zomatoCall.restaurants[j].restaurant.cuisines;
                                         var userRating = zomatoCall.restaurants[j].restaurant.user_rating.aggregate_rating;
                                         $("#card-results").append("<div class='card w-50 m-4 mx-auto'>" + "<img class='card-img-top' src='" + featureImg +
-                                    "' /> <div class='card-body'><h5 class='card-title'>" + restaurantName + 
-                                    "</h5><span>Cuisine: " + restaurantCuisine +
-                                    "</span><br><a href='" + menuUrl +
-                                    "'<i class='fas fa-utensils'>Menu</i></a><br><small>" + address +
-                                    "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
-                                    "</i></small></div></div>"
-                                    );
+                                            "' /> <div class='card-body'><h5 class='card-title'>" + restaurantName +
+                                            "</h5><span>Cuisine: " + restaurantCuisine +
+                                            "</span><br><a href='" + menuUrl +
+                                            "'<i class='fas fa-utensils'> Menu</i></a><br><small>" + address +
+                                            "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
+                                            "</i></small></div></div>"
+                                        )
                                     }
                                 }
                             }
+                        }
                         });
 
                     });
