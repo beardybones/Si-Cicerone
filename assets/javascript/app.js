@@ -43,8 +43,18 @@ $("#location-submit").on("click", function (e) {
 
     // gather user input
     userLocation = $("#location-input").val().trim();
-    console.log(userLocation);
-    googleMapsQueryURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + userLocation + "&key=AIzaSyB8Eim861DFG-C8nD2Z83vXE1Pbv-kHlwM";
+    function titleCase(userLocation) {
+        var splitStr = userLocation.toLowerCase().split(' ');
+        for (var i = 0; i < splitStr.length; i++) {
+            // You do not need to check if i is larger than splitStr length, as your for does that for you
+            // Assign it back to the array
+            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+        }
+        // Directly return the joined string
+        return splitStr.join(' ');
+    };
+    console.log(titleCase(userLocation));
+    googleMapsQueryURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + titleCase(userLocation) + "&key=AIzaSyB8Eim861DFG-C8nD2Z83vXE1Pbv-kHlwM";
 
     // googlemaps API call
     $.ajax({
@@ -120,7 +130,7 @@ $("#location-submit").on("click", function (e) {
                             restaurantsArray.push(responseTwo.restaurants[i].restaurant.name);
                         }
                         console.log('First: ' + restaurantsArray);
-
+                        restaurantsArray.toString();
                         // Storing restaurantsArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
 
                         sessionStorage.setItem('restaurantsArray', restaurantsArray);
@@ -138,104 +148,68 @@ $("#location-submit").on("click", function (e) {
         //this is the search term for beer set up
 
         beerInput = $("#alcohol-input").val().trim()
- 
-// converstion to capitalize the first letter of the location search term
-        userLocation = userLocation.toLocaleLowerCase();
-        console.log('LOCATION: ' + userLocation);
-        userLocation = userLocation.split(' ');
-        console.log('Split: ' + userLocation);
-        for (var i = 0; i < userLocation.length; i++) {
-        userLocation[i] = userLocation[i][0].toUpperCase() + userLocation[i].substr(1);
-        console.log('Cap First Array: ' + userLocation);
-        }
-       userLocation = userLocation.join(' ');
-       console.log('Cap First String: ' + userLocation);
 
+        beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&facet=style_name&facet=cat_name&facet=name_breweries&facet=country&facet=city&refine.country=United+States&refine.city=" + userLocation;
+        console.log(beerInput);
+        console.log(beerURL);
 
+        // Ajax Call to OpenBeerDB
+        $.ajax({
+            url: beerURL, method: "GET"
+        })
 
-    beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&facet=style_name&facet=cat_name&facet=name_breweries&facet=country&facet=city&refine.country=United+States&refine.city=" + userLocation;
-    console.log(beerInput);
-    console.log(beerURL);
+            .then(function (response) {
+                var sudzyArray = [];
+                console.log(response);
+                for (var i = 0; i < response.records.length; i++) {
+                    sudzyArray.push(response.records[i].fields.name_breweries);
+                }
+                console.log('First: ' + sudzyArray);
+                sudzyArray.toString();
+                // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
+                sessionStorage.setItem('sudzyArray', sudzyArray);
+                ct = 0;
+            });
 
-    // Ajax Call to OpenBeerDB
-    $.ajax({
-        url: beerURL, method: "GET"
-    })
+        // Retrieving  restaurantsArray from session storage to do the comparison 
+        var restaurantsArray = sessionStorage.getItem('restaurantsArray');
+        var responseTwo = JSON.parse(sessionStorage.getItem('responseTwo'));
 
-        .then(function (response) {
-            var sudzyArray = [];
-            console.log(response);
-            for (var i = 0; i < response.records.length; i++) {
-                sudzyArray.push(response.records[i].fields.name_breweries);
+        console.log(responseTwo);
+        console.log('Second: ' + restaurantsArray);
+
+        // Placeholder array for your beer array with forced data for testing
+        var sudzyArray = sessionStorage.getItem('sudzyArray');
+
+        // Checking for commonalities between the two arrays
+        var commonArray = [];
+        for (var i = 0; i < sudzyArray.length; i++) {
+            if (restaurantsArray.includes(sudzyArray[i])) {
+                commonArray.push(sudzyArray[i]);
+                alert('Hit: ' + sudzyArray[i]);
             }
-            console.log('First: ' + sudzyArray);
-
-            // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
-            sessionStorage.setItem('sudzyArray', sudzyArray);
-            ct = 0;
-        });
+            console.log('common: ' + commonArray);
+            sessionStorage.setItem('commonArray', commonArray);
+        }
 
 
-    // for (var i = 0; i < response.records.length; i++) {
+        // move to results page
+        $("#main-inputs").hide();
+        $("#logo").hide();
+        $("#results").show();
+    });
 
-    //     if (response.records[i].fields.city.toUpperCase().includes($("#location-input").val().trim().toUpperCase())) {
-    //         if (response.records[i].fields.website ===undefined){
-    //            response.records[i].fields.website = "";}
-    //        if (response.records[i].fields.name ===undefined){
-    //            response.records[i].fields.name = "";}
-    //        if (response.records[i].fields.address1 ===undefined){
-    //            response.records[i].fields.address1 = "";}
-    //        if ( response.records[i].fields.city===undefined){
-    //             response.records[i].fields.city = "";}
-    //        if ( response.records[i].fields.state===undefined){
-    //             response.records[i].fields.state = "";}
-    //         if (response.records[i].fields.cat_name===undefined){
-    //            response.records[i].fields.cat_name = "";}
-    //        if (response.records[i].fields.style_name===undefined){
-    //            response.records[i].fields.style_name = "";}
-    //         if (response.records[i].fields.descript===undefined){
-    //        response.records[i].fields.descript = "";
-    //        }
-
-    // move to results page
-    $("#main-inputs").hide();
-    $("#logo").hide();
-    $("#results").show();
 });
 
-    // Retrieving  restaurantsArray from session storage to do the comparison 
-    //         var restaurantsArray = sessionStorage.getItem('restaurantsArray');
-    //         var responseTwo = JSON.parse(sessionStorage.getItem('responseTwo'));
 
-    //         console.log(responseTwo);
-
-    //         console.log('Second: ' + restaurantsArray);
-
-    //         // Placeholder array for your beer array with forced data for testing
-    //         var sudzyArray = sessionStorage.getItem('sudzyArray');
-
-    //         // Checking for commonalities between the two arrays
-    //         var commonArray = [];
-    //         for (var i = 0; i < sudzyArray.length; i++) {
-    //             if (restaurantsArray.includes(sudzyArray[i])) {
-    //                 commonArray.push(sudzyArray[i]);
-    //                 alert('Hit: ' + sudzyArray[i]);
-    //             } 
-    //             console.log('common: ' + commonArray);
-    //             sessionStorage.setItem('commonArray', commonArray);
-    //         }
-    //     });
+$("#back-button-1").on("click", function (e) {
+    e.preventDefault();
 
 
-    // $("#back-button-1").on("click", function (e) {
-    //     e.preventDefault();
+    $("#location").show();
+    $("#main-inputs").hide();
+});
 
-
-    //     $("#location").show();
-    //     $("#main-inputs").hide();
-    // });
-
-
-    // ------------------------    
-});//end of code
+// ------------------------    
+//end of code
 // ------------------------
