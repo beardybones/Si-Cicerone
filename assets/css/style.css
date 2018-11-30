@@ -1,3 +1,13 @@
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+
+
+
 body{
     background:url("../images/bg.jpg") no-repeat scroll;
     background-position:center -800px;
@@ -7,3 +17,34 @@ body{
     margin-top:80px;
 }
 
+.mostRecentSearch {
+    margin: 30px;
+    background-color:white;
+    border: 1px solid black;
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+    float: right;
+    
+}
+#location-display {
+    margin: 2%;
+    font-weight: bold;
+    color: #000000;
+}
+#alcohol-display {
+   
+    font-weight: bold;
+    color: #000000;
+}
+#food-display {
+    margin: 2%;
+    font-weight: bold;
+    color: #000000;
+}
+#titleRecent {
+
+    margin: 2%;
+    font-weight: bold;
+    color: #000000;
+    border-bottom: black solid;
+}

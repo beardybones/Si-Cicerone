@@ -111,6 +111,8 @@ $("#input-submit").on("click", function () {
        
         $("#food-display").text(foodSearch);
       });
+//this is the end of the firebase stuff
+
 
 
 
