@@ -163,10 +163,9 @@ $("#location-submit").on("click", function (e) {
                             
 
                             var zomatoCall = JSON.parse(sessionStorage.getItem('zomatoCall'));
-                            var testArray = ["Juniper & Ivy", "Cafe 222"]
                             for (var j = 0; j < zomatoCall.restaurants.length; j++) {
-                                for (var k = 0; k < testArray.length; k++) {
-                                    if (zomatoCall.restaurants[j].restaurant.name == testArray[k]) {
+                                for (var k = 0; k < commonArray.length; k++) {
+                                    if (zomatoCall.restaurants[j].restaurant.name == commonArray[k]) {
                                         var restaurantName = zomatoCall.restaurants[j].restaurant.name;
                                         var menuUrl = zomatoCall.restaurants[j].restaurant.menu_url;
                                         var address = zomatoCall.restaurants[j].restaurant.location.address;
