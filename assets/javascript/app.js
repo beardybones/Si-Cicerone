@@ -113,9 +113,6 @@ $("#location-submit").on("click", function (e) {
                     var restaurantsArray = [];
                     var urlCuisine = '&cuisines=' + cuisineId;
                     var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine;
-                    console.log(queryURL);
-
-                    console.log(queryURL);
 
                     // ajax call to Zomato to get restaurants based on location and cuisine and build restaurant name array for comparison with open beer databasd
                     $.ajax({
@@ -130,12 +127,54 @@ $("#location-submit").on("click", function (e) {
                             restaurantsArray.push(responseTwo.restaurants[i].restaurant.name);
                         }
                         console.log('First: ' + restaurantsArray);
-                        restaurantsArray.toString();
                         // Storing restaurantsArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
 
-                        sessionStorage.setItem('restaurantsArray', restaurantsArray);
+                        sessionStorage.setItem('restaurantsArray', JSON.stringify(restaurantsArray));
                         sessionStorage.setItem('responseTwo', JSON.stringify(responseTwo));
                         ct = 0;
+                        // Ajax Call to OpenBeerDB
+                        //this is the search term for beer set up
+
+                        beerInput = $("#alcohol-input").val().trim()
+
+                        beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&facet=style_name&facet=cat_name&facet=name_breweries&facet=country&facet=city&refine.country=United+States&refine.city=" + userLocation;
+                        $.ajax({
+                            url: beerURL, method: "GET"
+                        }).then(function (response) {
+                            var sudzyArray = [];
+                            console.log(response);
+                            for (var i = 0; i < response.records.length; i++) {
+                                sudzyArray.push(response.records[i].fields.name_breweries);
+                            }
+                            console.log(sudzyArray);
+                            // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
+                            sessionStorage.setItem('sudzyArray', JSON.stringify(sudzyArray));
+                            ct = 0;
+                            // Retrieving  arrays from session storage to do the comparison 
+                            var restaurantsArray = JSON.parse(sessionStorage.getItem('restaurantsArray'));
+                            var responseTwo = JSON.parse(sessionStorage.getItem('responseTwo'));
+                            var sudzyArray = JSON.parse(sessionStorage.getItem('sudzyArray'));
+                            // console.log(restaurantsArray);
+                            console.log(restaurantsArray);
+                            // Checking for commonalities between the two arrays
+                            var commonArray = [];
+                            for (var i = 0; i < sudzyArray.length; i++) {
+                                if (restaurantsArray.includes(sudzyArray[i])) {
+                                    commonArray.push(sudzyArray[i]);    
+                                    // alert('Hit: ' + sudzyArray[i]);
+                                }
+                                console.log('common: ' + commonArray);
+                                sessionStorage.setItem('commonArray', commonArray);
+                            }
+                            console.log(commonArray);
+
+                            // move to results page
+                            $("#main-inputs").hide();
+                            $("#logo").hide();
+                            $("#results").show();
+                        });
+
+
                     });
                     break;
                 } else if (ct >= responseOne.cuisines.length) {
@@ -145,58 +184,9 @@ $("#location-submit").on("click", function (e) {
             }
         })
 
-        //this is the search term for beer set up
-
-        beerInput = $("#alcohol-input").val().trim()
-
-        beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&facet=style_name&facet=cat_name&facet=name_breweries&facet=country&facet=city&refine.country=United+States&refine.city=" + userLocation;
-        console.log(beerInput);
-        console.log(beerURL);
-
-        // Ajax Call to OpenBeerDB
-        $.ajax({
-            url: beerURL, method: "GET"
-        })
-
-            .then(function (response) {
-                var sudzyArray = [];
-                console.log(response);
-                for (var i = 0; i < response.records.length; i++) {
-                    sudzyArray.push(response.records[i].fields.name_breweries);
-                }
-                console.log('First: ' + sudzyArray);
-                sudzyArray.toString();
-                // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
-                sessionStorage.setItem('sudzyArray', sudzyArray);
-                ct = 0;
-            });
-
-        // Retrieving  restaurantsArray from session storage to do the comparison 
-        var restaurantsArray = sessionStorage.getItem('restaurantsArray');
-        var responseTwo = JSON.parse(sessionStorage.getItem('responseTwo'));
-
-        console.log(responseTwo);
-        console.log('Second: ' + restaurantsArray);
-
-        // Placeholder array for your beer array with forced data for testing
-        var sudzyArray = sessionStorage.getItem('sudzyArray');
-
-        // Checking for commonalities between the two arrays
-        var commonArray = [];
-        for (var i = 0; i < sudzyArray.length; i++) {
-            if (restaurantsArray.includes(sudzyArray[i])) {
-                commonArray.push(sudzyArray[i]);
-                alert('Hit: ' + sudzyArray[i]);
-            }
-            console.log('common: ' + commonArray);
-            sessionStorage.setItem('commonArray', commonArray);
-        }
 
 
-        // move to results page
-        $("#main-inputs").hide();
-        $("#logo").hide();
-        $("#results").show();
+
     });
 
 });
