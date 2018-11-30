@@ -51,52 +51,66 @@ $("#location-submit").on("click", function () {
     firebase.database().ref('locationLast/').set(locationSearch);
 })
 $("#input-submit").on("click", function () {
-    var input = $("#alcohol-input").val()
-    firebase.database().ref('alcoholLast/').set(input);
+    
+    var alcohol = $("#alcohol-input").val()
+    var alcoholSearch = {
+            alcohol: alcohol,
+   };
+  
+    firebase.database().ref('alcoholLast/').set(alcoholSearch);
 })
 $("#input-submit").on("click", function () {
-    var input = $("#food-input").val()
-    firebase.database().ref('foodLast/').set(input);
+    // var input = $("#food-input").val()
+    // firebase.database().ref('foodLast/').set(input);
+
+
+    var food = $("#food-input").val()
+    var foodSearch = {
+        food: food,
+   };
+  
+    firebase.database().ref('foodLast/').set(foodSearch);
+    
 })
 
 
-            //showing last this searched
-            // foodLast.on("value", function(snap) {
-
-            //     $("#food-display").text(snap);
-            //   });
-    // var foodLast = firebase.database().ref('foodLast/')
-    // console.log(foodLast);
             
     database.ref("/locationLast").on("value", function(childSnapshot) {
         console.log(childSnapshot.val());
-      
-        // Store everything into a variable.
+  
         var locationSearch = childSnapshot.val().location;
- 
-        // Employee Info
+     
         console.log(locationSearch);
-        
-      
-
-        // var newRow = $("<tr>").append(
-        //   $("<td>").text(empName),
-        //   $("<td>").text(empRole),
-        //   $("<td>").text(empStart),
-        //   $("<td>").text(empMonths),
-        //   $("<td>").text(empRate),
-        //   $("<td>").text(empBilled)
-        // );
-      
-        // Append the new row to the table
+    
         $("#location-display").text(locationSearch);
       });
-           
+
+
+      database.ref("/alcoholLast").on("value", function(childSnapshot) {
+        console.log(childSnapshot.val());
+      
+        // Store everything into a variable.
+        var alcoholSearch = childSnapshot.val().alcohol;
+ 
+        // Employee Info
+        console.log(alcoholSearch);
+       
+        $("#alcohol-display").text(alcoholSearch);
+      });
 
 
 
-
-
+      database.ref("/foodLast").on("value", function(childSnapshot) {
+        console.log(childSnapshot.val());
+      
+        // Store everything into a variable.
+        var foodSearch = childSnapshot.val().food;
+ 
+        // Employee Info
+        console.log(foodSearch);
+       
+        $("#food-display").text(foodSearch);
+      });
 
 
 
