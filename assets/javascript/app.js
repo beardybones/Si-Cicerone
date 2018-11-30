@@ -68,7 +68,7 @@ $("#input-submit").on("click", function () {
     // var foodLast = firebase.database().ref('foodLast/')
     // console.log(foodLast);
             
-    database.ref().on("value", function(childSnapshot) {
+    database.ref("/locationLast").on("value", function(childSnapshot) {
         console.log(childSnapshot.val());
       
         // Store everything into a variable.
