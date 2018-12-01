@@ -60,7 +60,6 @@
     <div class="row justify-content-center m-1" id="main-inputs">
 
       <form>
-
         <div class="form-group">
           <label for="alcohol-input" class="text-warning">Choose Beer</label>
           <input type="text" class="form-control text-warning" id="alcohol-input" placeholder="Beer">
@@ -73,7 +72,40 @@
           <span class="fas fa-chevron-left" aria-hidden="true"></span>
         </button>
         <button type="submit" class="btn btn-outline-warning" id="input-submit">Submit</button>
+        
+        <!--Most recent search result-->
+        <div class="mostRecentSearch m-4 p-2">
+          <div>
+            <div>
+              <h6 id="titleRecent">Most Recent Search</h6>
+            </div>
+            <div id="recent-search">
+              <h6 id="location-display">Location: </h6>
+              <h6 id="alcohol-display">Alcohol: </h6>
+              <h6 id="food-display">Food: </h6>
+            </div>
+          </div>
+        </div>
+        <!--End of most recent search results-->
+        <!--trending search result-->
+        <!-- <div class="mostRecentSearch m-4 p-2">
+          <div>
+            <div>
+              <h6 id="titleRecentTrend">Most Recent Trend</h6>
+            </div>
+            <div id="recentTrend-search">
+              <h6 id="locationTrend-display">Location: </h6>
+              <h6 id="alcoholTrend-display">Alcohol: </h6>
+              <h6 id="foodTrend-display">Food: </h6>
+            </div>
+          </div>
+        </div> -->
+        <!--end of trending search result-->
+
       </form>
+
+
+
     </div>
 
     <div class="container text-center m-1" id="results">
@@ -83,38 +115,8 @@
       </button>
 
 
-
-      <!--Most recent search result-->
-      <div class="col-lg-2 mostRecentSearch">
-        <div>
-          <div>
-            <h6 id="titleRecent">Most Recent Search</h6>
-          </div>
-          <div id="recent-search">
-            <h6 id="location-display">Location: </h6>
-            <h6 id="alcohol-display">Alcohol: </h6>
-            <h6 id="food-display">Food: </h6>
-          </div>
-        </div>
-      </div>
-      <!--End of most recent search results-->
-      <!--trending search result-->
-      <!--<div class="col-lg-2 mostRecentSearch">
-        <div>
-          <div>
-            <h6 id="titleRecentTrend">Most Recent Trend</h6>
-          </div>
-          <div id="recentTrend-search">
-            <h6 id="locationTrend-display">Location: </h6>
-            <h6 id="alcoholTrend-display">Alcohol: </h6>
-            <h6 id="foodTrend-display">Food: </h6>
-          </div>
-        </div>
-      </div>-->
-      <!--end of trending search result-->
-
       <div class="card-column" id="card-results">
-        
+
       </div>
     </div>
 
