@@ -1,21 +1,197 @@
 
+
+
+
+
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyAhTmmpStfimrjJ5ecnpzrkasnHC9dZG58",
+    authDomain: "si-project-12ec9.firebaseapp.com",
+    databaseURL: "https://si-project-12ec9.firebaseio.com",
+    projectId: "si-project-12ec9",
+    storageBucket: "si-project-12ec9.appspot.com",
+    messagingSenderId: "298658243833"
+};
+firebase.initializeApp(config);
+var database = firebase.database();
+
+
+
+
+$("#age-submit").on("click", function () {
+    var input = $("#inputAge").val()
+    firebase.database().ref('age/').push(input);
+})
+$("#location-submit").on("click", function () {
+    var input = $("#location-input").val()
+    firebase.database().ref('location/').push(input);
+})
+$("#input-submit").on("click", function () {
+    var input = $("#alcohol-input").val()
+    firebase.database().ref('alcohol/').push(input);
+})
+$("#input-submit").on("click", function () {
+    var input = $("#food-input").val()
+    firebase.database().ref('food/').push(input);
+})
+
+
+
+//setting data in new place to show the last thing that was searched
+$("#age-submit").on("click", function () {
+    var input = $("#inputAge").val()
+    firebase.database().ref('ageLast/').set(input);
+})
+$("#location-submit").on("click", function () {
+    var location = $("#location-input").val()
+    var locationSearch = {
+        location: location,
+    };
+    // var input = $("#location-input").val()
+    firebase.database().ref('locationLast/').set(locationSearch);
+})
+$("#input-submit").on("click", function () {
+
+    var alcohol = $("#alcohol-input").val()
+    var alcoholSearch = {
+        alcohol: alcohol,
+    };
+
+    firebase.database().ref('alcoholLast/').set(alcoholSearch);
+})
+$("#input-submit").on("click", function () {
+
+    var food = $("#food-input").val()
+    var foodSearch = {
+        food: food,
+    };
+
+    firebase.database().ref('foodLast/').set(foodSearch);
+
+})
+
+
+
+database.ref("/locationLast").on("value", function (childSnapshot) {
+    console.log(childSnapshot.val());
+
+    var locationSearch = childSnapshot.val().location;
+
+    console.log(locationSearch);
+
+    $("#location-display").text(locationSearch);
+});
+
+
+database.ref("/alcoholLast").on("value", function (childSnapshot) {
+    console.log(childSnapshot.val());
+
+    // Store everything into a variable.
+    var alcoholSearch = childSnapshot.val().alcohol;
+
+    // Employee Info
+    console.log(alcoholSearch);
+
+    $("#alcohol-display").text(alcoholSearch);
+});
+
+database.ref("/foodLast").on("value", function (childSnapshot) {
+    console.log(childSnapshot.val());
+
+    // Store everything into a variable.
+    var foodSearch = childSnapshot.val().food;
+
+    // Employee Info
+    console.log(foodSearch);
+
+    $("#food-display").text(foodSearch);
+});
+//this is the end of the firebase stuff
+//trending firebase term
+var alcoholData = [""];
+database.ref("/alcohol").on("child_added", function (childSnapshot) {
+
+    console.log(childSnapshot.val());
+    console.log("hi")
+
+    console.log(alcoholData);
+
+    alcoholData.push(childSnapshot.val());
+    console.log(alcoholData)
+
+    $("#alcoholTrend-display").append(childSnapshot.val());
+});
+var mf = 1;
+var m = 0;
+var item;
+for (var i=0; i<alcoholData.length; i++)
+{
+        for (var j=i; j<alcoholData.length; j++)
+        {
+                if (alcoholData[i] == alcoholData[j])
+                 m++;
+                if (mf<m)
+                {
+                  mf=m; 
+                  item = alcoholData[i];
+                }
+        }
+        m=0;
+}
+console.log(item+" ( " +mf +" times ) ") ;
+   
+    
+
+
+
+
+
 // initialize web page
 $("#location").hide();
 $("#main-inputs").hide();
 $("#results").hide();
 
-// Initialize Firebase
-var config = {
-    apiKey: "AIzaSyCw8CMoohclCbxF8SSg1xOOiGtoYrue4iI",
-    authDomain: "si-cicerone.firebaseapp.com",
-    databaseURL: "https://si-cicerone.firebaseio.com",
-    projectId: "si-cicerone",
-    storageBucket: "si-cicerone.appspot.com",
-    messagingSenderId: "993727244007"
-};
-firebase.initializeApp(config);
-var database = firebase.database();
+//this is new username password stuff
+// const auth = firebase.auth();
+// auth.signInWithEmailAndPassword(email, pass);
+// auth.createUserWithEmailAndPassword(email, pass);    
+// auth.onAuthStateChanged(firebaseUser => { });
 
+//                 //get elements from the dom
+// const txtEmail = document.getElementById('txtEmail');
+// const txtPassword = document.getElementById('txtPassword');
+// const btnLogin = document.getElementById('btnLogin');
+// const btnSignUp = document.getElementById('btnSignUp');
+// const btnLogout = document.getElementById('btnLogout');
+
+//             //add login event 
+//     btnLogin.addEventListener('click', e=>{
+//                 //get email and pass
+//         const email = txtEmail.val();
+//         const pass = txtPassword.val();
+//         const auth = firebase.auth();
+//                 //sign in
+//         const promise = auth.signInWithEmailAndPassword(email, pass);
+//         promise.catch(e => console.log(e.message));
+
+
+//     })
+
+
+
+
+
+//this is the end of new password stuff
+
+
+
+
+
+
+checkDataFunction = function () {
+
+
+}
 
 $("#age-submit").on("click", function (e) {
     e.preventDefault();
@@ -78,14 +254,14 @@ $("#location-submit").on("click", function (e) {
 
         });
 
-
-
     // On Submit builds the two urls required for the Zomato ajax calls
     $('#input-submit').on('click', function (e) {
         e.preventDefault();
         cuisineInput = $('#food-input').val().trim();
+
         // cuisineIput to be populated by #food-input
         radiusMeters = 1000;
+
         zomatoApiKey = '7fd9b4ff24a0fa2eae39b02482c2e9b1';
         urlOne = 'https://developers.zomato.com/api/v2.1/cuisines?';
         urlTwo = 'https://developers.zomato.com/api/v2.1/search?';
@@ -94,6 +270,7 @@ $("#location-submit").on("click", function (e) {
         // Ajax call to Zomato to gather cuisine object for the lat/long coordinates
         cuisineUrl = urlOne + urlLat + urlLon;
         console.log(cuisineUrl);
+
         $.ajax({
             url: cuisineUrl,
             method: "GET",
@@ -112,9 +289,11 @@ $("#location-submit").on("click", function (e) {
                     cuisineId = responseOne.cuisines[i].cuisine.cuisine_id;
                     var restaurantsArray = [];
                     var urlCuisine = '&cuisines=' + cuisineId;
+
                     var urlLocality = '&locality=' + userLocation;
                     var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine + urlLocality;
                     var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine + "&sort=real_distance&order=desc";
+
 
                     // ajax call to Zomato to get restaurants based on location and cuisine and build restaurant name array for comparison with open beer databasd
                     $.ajax({
@@ -124,6 +303,7 @@ $("#location-submit").on("click", function (e) {
                             "user-key": zomatoApiKey
                         }
                     }).then(function (responseTwo) {
+
                         for (var i = 0; i < responseTwo.restaurants.length; i++) {
                             restaurantsArray.push(responseTwo.restaurants[i].restaurant.name);
                         }
@@ -205,6 +385,7 @@ $("#location-submit").on("click", function (e) {
 
                     });
 
+
                     break;
                 } else if (ct >= responseOne.cuisines.length) {
                     alert("nothing found");
@@ -213,13 +394,12 @@ $("#location-submit").on("click", function (e) {
             }
         })
 
-
         // move to results page
         $("#main-inputs").hide();
         $("#logo").hide();
         $("#results").show();
     });
-});
+
 
 
 $("#back-button-1").on("click", function (e) {

@@ -15,11 +15,24 @@
 
 
   <!-- CSS -->
+  <!--This is to put the SiLogo in the tab-->
+  <link rel="shortcut icon" type="image/png" href="assets/images/Cicerone-logo.png">
   <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
 
 <body>
+  <!-- this is NEW Password stuff -->
+
+  <!-- <div class="signInContainer">
+              <input id="txtEmail" type="email" placeholder="Email">
+              <input id="txtPassword" type="password" placeholder="Password">
+              <button id="btnLogin" class="btn btn-action">Log in</button>
+              <button id="btnSignUp" class="btn btn-secondary">Sign Up</button>
+              <button id="btnLogout" class=" btn btn-action hide">Log Out</button>
+          </div> -->
+  <!-- This is the END of new password stuff -->
+
   <div class="container text-center main">
 
     <img src="assets/images/Cicerone-logo.png" class="img-responsive" width="128px" id="logo">
@@ -32,6 +45,7 @@
         <button type="submit" class="btn btn-outline-warning" id="age-submit">Submit</button>
       </form>
     </div>
+
 
     <div class="row justify-content-center m-1" id="location">
       <form>
@@ -46,7 +60,6 @@
     <div class="row justify-content-center m-1" id="main-inputs">
 
       <form>
-
 
         <div class="form-group">
           <label for="alcohol-input" class="text-warning">Choose Beer</label>
@@ -69,10 +82,40 @@
         <span class="fas fa-chevron-left" aria-hidden="true"></span>
       </button>
 
+
+
+      <!--Most recent search result-->
+      <div class="col-lg-2 mostRecentSearch">
+        <div>
+          <div>
+            <h6 id="titleRecent">Most Recent Search</h6>
+          </div>
+          <div id="recent-search">
+            <h6 id="location-display">Location: </h6>
+            <h6 id="alcohol-display">Alcohol: </h6>
+            <h6 id="food-display">Food: </h6>
+          </div>
+        </div>
+      </div>
+      <!--End of most recent search results-->
+      <!--trending search result-->
+      <!--<div class="col-lg-2 mostRecentSearch">
+        <div>
+          <div>
+            <h6 id="titleRecentTrend">Most Recent Trend</h6>
+          </div>
+          <div id="recentTrend-search">
+            <h6 id="locationTrend-display">Location: </h6>
+            <h6 id="alcoholTrend-display">Alcohol: </h6>
+            <h6 id="foodTrend-display">Food: </h6>
+          </div>
+        </div>
+      </div>-->
+      <!--end of trending search result-->
+
       <div class="card-column" id="card-results">
         
       </div>
-
     </div>
 
   </div>
@@ -85,6 +128,9 @@
 
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+  <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase.js"></script>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
     crossorigin="anonymous"></script>
