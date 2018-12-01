@@ -141,21 +141,21 @@ database.ref("/alcohol").on("child_added", function (childSnapshot) {
 
     $("#alcoholTrend-display").append(childSnapshot.val());
 });
-var mf = 1;
-var m = 0;
-var item;
-for (var i = 0; i < alcoholData.length; i++) {
-    for (var j = i; j < alcoholData.length; j++) {
-        if (alcoholData[i] == alcoholData[j])
-            m++;
-        if (mf < m) {
-            mf = m;
-            item = alcoholData[i];
-        }
-    }
-    m = 0;
-}
-console.log(item + " ( " + mf + " times ) ");
+// var mf = 1;
+// var m = 0;
+// var item;
+// for (var i = 0; i < alcoholData.length; i++) {
+//     for (var j = i; j < alcoholData.length; j++) {
+//         if (alcoholData[i] == alcoholData[j])
+//             m++;
+//         if (mf < m) {
+//             mf = m;
+//             item = alcoholData[i];
+//         }
+//     }
+//     m = 0;
+// }
+// console.log(item + " ( " + mf + " times ) ");
 
 
 
@@ -270,7 +270,7 @@ $("#location-submit").on("click", function (e) {
             $("#main-inputs").show();
 
         });
-
+    })
     // On Submit builds the two urls required for the Zomato ajax calls
     $('#input-submit').on('click', function (e) {
         e.preventDefault();
