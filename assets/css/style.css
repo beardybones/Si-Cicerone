@@ -9,7 +9,7 @@ html {
 
 
 body{
-    background:url("../images/bg.jpg") no-repeat scroll;
+    background:url("../images/bg.jpg") repeat-y scroll;
     background-position:center -800px;
 }
 
