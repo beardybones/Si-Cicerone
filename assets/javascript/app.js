@@ -1,6 +1,7 @@
-
-
-
+// initialize web page
+$("#location").hide();
+$("#main-inputs").hide();
+$("#results").hide();
 
 
 // Initialize Firebase
@@ -139,17 +140,7 @@ for (var i=0; i<alcoholData.length; i++)
         m=0;
 }
 console.log(item+" ( " +mf +" times ) ") ;
-   
-    
 
-
-
-
-
-// initialize web page
-$("#location").hide();
-$("#main-inputs").hide();
-$("#results").hide();
 
 //this is new username password stuff
 // const auth = firebase.auth();
@@ -183,13 +174,7 @@ $("#results").hide();
 
 //this is the end of new password stuff
 
-
-
-
-
-
 checkDataFunction = function () {
-
 
 }
 
@@ -418,3 +403,4 @@ $("#back-button-2").on("click", function (e) {
 // ------------------------    
 //end of code
 // ------------------------
+});
