@@ -228,8 +228,6 @@ $("#location-submit").on("click", function (e) {
             urlLat = 'lat=' + userLat;
             urlLon = '&lon=' + userLng;
 
-            console.log(urlLat, urlLon);
-
             // move to next screen
             $("#location").hide();
             $("#main-inputs").show();
@@ -251,7 +249,6 @@ $("#location-submit").on("click", function (e) {
 
         // Ajax call to Zomato to gather cuisine object for the lat/long coordinates
         cuisineUrl = urlOne + urlLat + urlLon;
-        // console.log(cuisineUrl);
 
         $.ajax({
             url: cuisineUrl,
@@ -290,7 +287,6 @@ $("#location-submit").on("click", function (e) {
                             restaurantsArray.push(responseTwo.restaurants[i].restaurant.location.address);
                         }
                         // Storing restaurantsArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
-                        console.log(restaurantsArray);
                         sessionStorage.setItem('restaurantsArray', JSON.stringify(restaurantsArray));
                         sessionStorage.setItem('zomatoCall', JSON.stringify(responseTwo));
                         ct = 0;
@@ -309,25 +305,34 @@ $("#location-submit").on("click", function (e) {
                                 sudzyArray.push(response.records[i].fields.address1);
                             }
                             // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
-                            console.log(sudzyArray);
                             sessionStorage.setItem('sudzyArray', JSON.stringify(sudzyArray));
                             ct = 0;
                             // Retrieving  arrays from session storage to do the comparison 
                             var restaurantsArray = JSON.parse(sessionStorage.getItem('restaurantsArray'));
-                            console.log(restaurantsArray);
                             var sudzyArray = JSON.parse(sessionStorage.getItem('sudzyArray'));
-                            console.log(sudzyArray);
-                            // console.log(restaurantsArray);
+
                             // Checking for commonalities between the two arrays
                             var commonArray = [];
-                            for (var i = 0; i < sudzyArray.length; i++) {
-                                if (restaurantsArray.includes(sudzyArray[i])) {
-                                    commonArray.push(sudzyArray[i]);
-                                    // alert('Hit: ' + sudzyArray[i]);
+                            for (var q = 0; q < sudzyArray.length; q++) {
+                                for (var i = 0; i < restaurantsArray.length; i++) {
+                                    if (restaurantsArray[i].includes(sudzyArray[q])) {
+                                        commonArray.push(restaurantsArray[i]);
+
+                                    }
                                 }
-                                sessionStorage.setItem('commonArray', commonArray);
                             }
+                            sessionStorage.setItem('commonArray', commonArray);
+
+                            // Cleaning out duplicates in the commonArray
+                            console.log(commonArray);
+                            var commonArray = commonArray.filter(
+                                function (a) { if (!this[a]) { this[a] = 1; return a; } },
+                                {}
+                            );
+                            console.log(commonArray);
+
                             var zomatoCall = JSON.parse(sessionStorage.getItem('zomatoCall'));
+                            console.log(zomatoCall);
                             if (commonArray === undefined || commonArray.length == 0) {
                                 console.log(commonArray);
                                 $("#card-results").empty();
@@ -349,7 +354,8 @@ $("#location-submit").on("click", function (e) {
                             } else {
                                 for (var j = 0; j < zomatoCall.restaurants.length; j++) {
                                     for (var k = 0; k < commonArray.length; k++) {
-                                        if (zomatoCall.restaurants[j].restaurant.name == commonArray[k]) {
+                                        //Changed the comp below to .retaurant.location.address
+                                        if (zomatoCall.restaurants[j].restaurant.location.address == commonArray[k]) {
                                             var restaurantName = zomatoCall.restaurants[j].restaurant.name;
                                             var menuUrl = zomatoCall.restaurants[j].restaurant.menu_url;
                                             var address = zomatoCall.restaurants[j].restaurant.location.address;
