@@ -74,36 +74,36 @@ $("#input-submit").on("click", function () {
 
 
 database.ref("/locationLast").on("value", function (childSnapshot) {
-    console.log(childSnapshot.val());
+    // console.log(childSnapshot.val());
 
     var locationSearch = childSnapshot.val().location;
 
-    console.log(locationSearch);
+    // console.log(locationSearch);
 
     $("#location-display").text(locationSearch);
 });
 
 
 database.ref("/alcoholLast").on("value", function (childSnapshot) {
-    console.log(childSnapshot.val());
+    // console.log(childSnapshot.val());
 
     // Store everything into a variable.
     var alcoholSearch = childSnapshot.val().alcohol;
 
     // Employee Info
-    console.log(alcoholSearch);
+    // console.log(alcoholSearch);
 
     $("#alcohol-display").text(alcoholSearch);
 });
 
 database.ref("/foodLast").on("value", function (childSnapshot) {
-    console.log(childSnapshot.val());
+    // console.log(childSnapshot.val());
 
     // Store everything into a variable.
     var foodSearch = childSnapshot.val().food;
 
     // Employee Info
-    console.log(foodSearch);
+    // console.log(foodSearch);
 
     $("#food-display").text(foodSearch);
 });
@@ -112,34 +112,31 @@ database.ref("/foodLast").on("value", function (childSnapshot) {
 var alcoholData = [""];
 database.ref("/alcohol").on("child_added", function (childSnapshot) {
 
-    console.log(childSnapshot.val());
-    console.log("hi")
+    // console.log(childSnapshot.val());
+    // console.log("hi")
 
-    console.log(alcoholData);
+    // console.log(alcoholData);
 
     alcoholData.push(childSnapshot.val());
-    console.log(alcoholData)
+    // console.log(alcoholData)
 
     $("#alcoholTrend-display").append(childSnapshot.val());
 });
 var mf = 1;
 var m = 0;
 var item;
-for (var i=0; i<alcoholData.length; i++)
-{
-        for (var j=i; j<alcoholData.length; j++)
-        {
-                if (alcoholData[i] == alcoholData[j])
-                 m++;
-                if (mf<m)
-                {
-                  mf=m; 
-                  item = alcoholData[i];
-                }
+for (var i = 0; i < alcoholData.length; i++) {
+    for (var j = i; j < alcoholData.length; j++) {
+        if (alcoholData[i] == alcoholData[j])
+            m++;
+        if (mf < m) {
+            mf = m;
+            item = alcoholData[i];
         }
-        m=0;
+    }
+    m = 0;
 }
-console.log(item+" ( " +mf +" times ) ") ;
+// console.log(item+" ( " +mf +" times ) ") ;
 
 
 //this is new username password stuff
@@ -254,7 +251,7 @@ $("#location-submit").on("click", function (e) {
 
         // Ajax call to Zomato to gather cuisine object for the lat/long coordinates
         cuisineUrl = urlOne + urlLat + urlLon;
-        console.log(cuisineUrl);
+        // console.log(cuisineUrl);
 
         $.ajax({
             url: cuisineUrl,
@@ -290,31 +287,36 @@ $("#location-submit").on("click", function (e) {
                     }).then(function (responseTwo) {
 
                         for (var i = 0; i < responseTwo.restaurants.length; i++) {
-                            restaurantsArray.push(responseTwo.restaurants[i].restaurant.name);
+                            restaurantsArray.push(responseTwo.restaurants[i].restaurant.location.address);
                         }
                         // Storing restaurantsArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
-
+                        console.log(restaurantsArray);
                         sessionStorage.setItem('restaurantsArray', JSON.stringify(restaurantsArray));
                         sessionStorage.setItem('zomatoCall', JSON.stringify(responseTwo));
                         ct = 0;
                         // Ajax Call to OpenBeerDB
                         //this is the search term for beer set up
 
+
+
                         beerInput = $("#alcohol-input").val().trim()
-                        beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&facet=style_name&facet=cat_name&facet=name_breweries&facet=country&facet=city&refine.country=United+States&refine.city=" + userLocation;
+                        beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=IPA&rows=30&facet=style_name&facet=cat_name&facet=name_breweries&facet=country&refine.country=United+States&refine.city=Escondido";
                         $.ajax({
                             url: beerURL, method: "GET"
                         }).then(function (response) {
                             var sudzyArray = [];
                             for (var i = 0; i < response.records.length; i++) {
-                                sudzyArray.push(response.records[i].fields.name_breweries);
+                                sudzyArray.push(response.records[i].fields.address1);
                             }
                             // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
+                            console.log(sudzyArray);
                             sessionStorage.setItem('sudzyArray', JSON.stringify(sudzyArray));
                             ct = 0;
                             // Retrieving  arrays from session storage to do the comparison 
                             var restaurantsArray = JSON.parse(sessionStorage.getItem('restaurantsArray'));
+                            console.log(restaurantsArray);
                             var sudzyArray = JSON.parse(sessionStorage.getItem('sudzyArray'));
+                            console.log(sudzyArray);
                             // console.log(restaurantsArray);
                             // Checking for commonalities between the two arrays
                             var commonArray = [];
@@ -326,7 +328,7 @@ $("#location-submit").on("click", function (e) {
                                 sessionStorage.setItem('commonArray', commonArray);
                             }
                             var zomatoCall = JSON.parse(sessionStorage.getItem('zomatoCall'));
-                            if(commonArray === undefined || commonArray.length == 0){
+                            if (commonArray === undefined || commonArray.length == 0) {
                                 console.log(commonArray);
                                 $("#card-results").empty();
                                 for (var l = 0; l < 5; l++) {
@@ -344,28 +346,28 @@ $("#location-submit").on("click", function (e) {
                                         "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
                                         "</i></small></div></div>")
                                 }
-                            }else{
-                            for (var j = 0; j < zomatoCall.restaurants.length; j++) {
-                                for (var k = 0; k < commonArray.length; k++) {
-                                    if (zomatoCall.restaurants[j].restaurant.name == commonArray[k]) {
-                                        var restaurantName = zomatoCall.restaurants[j].restaurant.name;
-                                        var menuUrl = zomatoCall.restaurants[j].restaurant.menu_url;
-                                        var address = zomatoCall.restaurants[j].restaurant.location.address;
-                                        var featureImg = zomatoCall.restaurants[j].restaurant.featured_image;
-                                        var restaurantCuisine = zomatoCall.restaurants[j].restaurant.cuisines;
-                                        var userRating = zomatoCall.restaurants[j].restaurant.user_rating.aggregate_rating;
-                                        $("#card-results").append("<div class='card w-50 m-4 mx-auto'>" + "<img class='card-img-top' src='" + featureImg +
-                                            "' /> <div class='card-body'><h5 class='card-title'>" + restaurantName +
-                                            "</h5><span>Cuisine: " + restaurantCuisine +
-                                            "</span><br><a href='" + menuUrl +
-                                            "'<i class='fas fa-utensils'> Menu</i></a><br><small>" + address +
-                                            "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
-                                            "</i></small></div></div>"
-                                        )
+                            } else {
+                                for (var j = 0; j < zomatoCall.restaurants.length; j++) {
+                                    for (var k = 0; k < commonArray.length; k++) {
+                                        if (zomatoCall.restaurants[j].restaurant.name == commonArray[k]) {
+                                            var restaurantName = zomatoCall.restaurants[j].restaurant.name;
+                                            var menuUrl = zomatoCall.restaurants[j].restaurant.menu_url;
+                                            var address = zomatoCall.restaurants[j].restaurant.location.address;
+                                            var featureImg = zomatoCall.restaurants[j].restaurant.featured_image;
+                                            var restaurantCuisine = zomatoCall.restaurants[j].restaurant.cuisines;
+                                            var userRating = zomatoCall.restaurants[j].restaurant.user_rating.aggregate_rating;
+                                            $("#card-results").append("<div class='card w-50 m-4 mx-auto'>" + "<img class='card-img-top' src='" + featureImg +
+                                                "' /> <div class='card-body'><h5 class='card-title'>" + restaurantName +
+                                                "</h5><span>Cuisine: " + restaurantCuisine +
+                                                "</span><br><a href='" + menuUrl +
+                                                "'<i class='fas fa-utensils'> Menu</i></a><br><small>" + address +
+                                                "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
+                                                "</i></small></div></div>"
+                                            )
+                                        }
                                     }
                                 }
                             }
-                        }
                         });
 
                     });
@@ -387,20 +389,20 @@ $("#location-submit").on("click", function (e) {
 
 
 
-$("#back-button-1").on("click", function (e) {
-    e.preventDefault();
-    $("#location").show();
-    $("#main-inputs").hide();
-});
+    $("#back-button-1").on("click", function (e) {
+        e.preventDefault();
+        $("#location").show();
+        $("#main-inputs").hide();
+    });
 
-$("#back-button-2").on("click", function (e) {
-    e.preventDefault();
-    $("#main-inputs").show();
-    $("#logo").show();
-    $("#results").hide();
-})
+    $("#back-button-2").on("click", function (e) {
+        e.preventDefault();
+        $("#main-inputs").show();
+        $("#logo").show();
+        $("#results").hide();
+    })
 
-// ------------------------    
-//end of code
-// ------------------------
+    // ------------------------    
+    //end of code
+    // ------------------------
 });
