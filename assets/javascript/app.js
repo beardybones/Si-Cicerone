@@ -1,7 +1,7 @@
-
-
-
-
+// initialize web page
+$("#location").hide();
+$("#main-inputs").hide();
+$("#results").hide();
 
 // Initialize Firebase
 var config = {
@@ -75,36 +75,36 @@ $("#input-submit").on("click", function () {
 
 
 database.ref("/locationLast").on("value", function (childSnapshot) {
-    console.log(childSnapshot.val());
+    // console.log(childSnapshot.val());
 
     var locationSearch = childSnapshot.val().location;
 
-    console.log(locationSearch);
+    // console.log(locationSearch);
 
     $("#location-display").text(locationSearch);
 });
 
 
 database.ref("/alcoholLast").on("value", function (childSnapshot) {
-    console.log(childSnapshot.val());
+    // console.log(childSnapshot.val());
 
     // Store everything into a variable.
     var alcoholSearch = childSnapshot.val().alcohol;
 
     // Employee Info
-    console.log(alcoholSearch);
+    // console.log(alcoholSearch);
 
     $("#alcohol-display").text(alcoholSearch);
 });
 
 database.ref("/foodLast").on("value", function (childSnapshot) {
-    console.log(childSnapshot.val());
+    // console.log(childSnapshot.val());
 
     // Store everything into a variable.
     var foodSearch = childSnapshot.val().food;
 
     // Employee Info
-    console.log(foodSearch);
+    // console.log(foodSearch);
 
     $("#food-display").text(foodSearch);
 });
@@ -113,32 +113,27 @@ database.ref("/foodLast").on("value", function (childSnapshot) {
 var alcoholData = [""];
 database.ref("/alcohol").on("child_added", function (childSnapshot) {
 
-    console.log(childSnapshot.val());
-
-
-    console.log(alcoholData);
-
+  
+  
     alcoholData.push(childSnapshot.val());
-    console.log(alcoholData)
+    // console.log(alcoholData)
 
     $("#alcoholTrend-display").append(childSnapshot.val());
 var mf = 1;
 var m = 0;
 var item;
-for (var i=0; i<alcoholData.length; i++)
-{
-        for (var j=i; j<alcoholData.length; j++)
-        {
-                if (alcoholData[i] == alcoholData[j])
-                 m++;
-                if (mf<m)
-                {
-                  mf=m; 
-                  item = alcoholData[i];
-                }
+for (var i = 0; i < alcoholData.length; i++) {
+    for (var j = i; j < alcoholData.length; j++) {
+        if (alcoholData[i] == alcoholData[j])
+            m++;
+        if (mf < m) {
+            mf = m;
+            item = alcoholData[i];
         }
-        m=0;
+    }
+    m = 0;
 }
+
 console.log(item+" ( " +mf +" times ) ") ;
 $("#alcoholTrend-display").text(item);
 })
@@ -176,6 +171,15 @@ for (var i=0; i<foodData.length; i++)
 console.log(item+" ( " +mf +" times ) ") ;
 $("#foodTrend-display").text(item);
 })
+=======
+// console.log(item+" ( " +mf +" times ) ") ;
+
+
+//this is new username password stuff
+// const auth = firebase.auth();
+// auth.signInWithEmailAndPassword(email, pass);
+// auth.createUserWithEmailAndPassword(email, pass);    
+// auth.onAuthStateChanged(firebaseUser => { });
 
 ////Location Trending
 var locationData = [""];
@@ -217,17 +221,11 @@ $("#locationTrend-display").text(item);
 
 
 
-// initialize web page
-$("#location").hide();
-$("#main-inputs").hide();
-$("#results").hide();
-
 
 
 
 
 checkDataFunction = function () {
-
 
 }
 
@@ -284,21 +282,39 @@ $("#location-submit").on("click", function (e) {
             urlLat = 'lat=' + userLat;
             urlLon = '&lon=' + userLng;
 
-            console.log(urlLat, urlLon);
-
             // move to next screen
             $("#location").hide();
             $("#main-inputs").show();
 
         });
 })
-// On Submit builds the two urls required for the Zomato ajax calls
-$('#input-submit').on('click', function (e) {
-    e.preventDefault();
-    cuisineInput = $('#food-input').val().trim();
 
-    // cuisineIput to be populated by #food-input
-    radiusMeters = 1000;
+    // On Submit builds the two urls required for the Zomato ajax calls
+    $('#input-submit').on('click', function (e) {
+        e.preventDefault();
+        cuisineInput = $('#food-input').val().trim();
+
+        // cuisineIput to be populated by #food-input
+        radiusMeters = 1000;
+
+        zomatoApiKey = '7fd9b4ff24a0fa2eae39b02482c2e9b1';
+        urlOne = 'https://developers.zomato.com/api/v2.1/cuisines?';
+        urlTwo = 'https://developers.zomato.com/api/v2.1/search?';
+        urlRadius = '&radius=' + radiusMeters;
+
+        // Ajax call to Zomato to gather cuisine object for the lat/long coordinates
+        cuisineUrl = urlOne + urlLat + urlLon;
+
+        $.ajax({
+            url: cuisineUrl,
+            method: "GET",
+            headers: {
+                "user-key": zomatoApiKey
+            }
+        }).then(function (responseOne) {
+
+            var cuisineId;
+            ct = 0;
 
     zomatoApiKey = '7fd9b4ff24a0fa2eae39b02482c2e9b1';
     urlOne = 'https://developers.zomato.com/api/v2.1/cuisines?';
@@ -362,6 +378,7 @@ $('#input-submit').on('click', function (e) {
                         for (var i = 0; i < response.records.length; i++) {
                             sudzyArray.push(response.records[i].fields.name_breweries);
                         }
+                      
                         // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
                         sessionStorage.setItem('sudzyArray', JSON.stringify(sudzyArray));
                         ct = 0;
@@ -419,8 +436,102 @@ $('#input-submit').on('click', function (e) {
                                 }
                             }
                         }
-                    });
 
+                    }).then(function (responseTwo) {
+
+                        for (var i = 0; i < responseTwo.restaurants.length; i++) {
+                            restaurantsArray.push(responseTwo.restaurants[i].restaurant.location.address);
+                        }
+                        // Storing restaurantsArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
+                        sessionStorage.setItem('restaurantsArray', JSON.stringify(restaurantsArray));
+                        sessionStorage.setItem('zomatoCall', JSON.stringify(responseTwo));
+                        ct = 0;
+                        // Ajax Call to OpenBeerDB
+                        //this is the search term for beer set up
+
+
+
+                        beerInput = $("#alcohol-input").val().trim()
+                        beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=IPA&rows=30&facet=style_name&facet=cat_name&facet=name_breweries&facet=country&refine.country=United+States&refine.city=Escondido";
+                        $.ajax({
+                            url: beerURL, method: "GET"
+                        }).then(function (response) {
+                            var sudzyArray = [];
+                            for (var i = 0; i < response.records.length; i++) {
+                                sudzyArray.push(response.records[i].fields.address1);
+                            }
+                            // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
+                            sessionStorage.setItem('sudzyArray', JSON.stringify(sudzyArray));
+                            ct = 0;
+                            // Retrieving  arrays from session storage to do the comparison 
+                            var restaurantsArray = JSON.parse(sessionStorage.getItem('restaurantsArray'));
+                            var sudzyArray = JSON.parse(sessionStorage.getItem('sudzyArray'));
+
+                            // Checking for commonalities between the two arrays
+                            var commonArray = [];
+                            for (var q = 0; q < sudzyArray.length; q++) {
+                                for (var i = 0; i < restaurantsArray.length; i++) {
+                                    if (restaurantsArray[i].includes(sudzyArray[q])) {
+                                        commonArray.push(restaurantsArray[i]);
+
+                                    }
+                                }
+                            }
+                            sessionStorage.setItem('commonArray', commonArray);
+
+                            // Cleaning out duplicates in the commonArray
+                            console.log(commonArray);
+                            var commonArray = commonArray.filter(
+                                function (a) { if (!this[a]) { this[a] = 1; return a; } },
+                                {}
+                            );
+                            console.log(commonArray);
+
+                            var zomatoCall = JSON.parse(sessionStorage.getItem('zomatoCall'));
+                            console.log(zomatoCall);
+                            if (commonArray === undefined || commonArray.length == 0) {
+                                console.log(commonArray);
+                                $("#card-results").empty();
+                                for (var l = 0; l < 5; l++) {
+                                    var restaurantName = zomatoCall.restaurants[l].restaurant.name;
+                                    var menuUrl = zomatoCall.restaurants[l].restaurant.menu_url;
+                                    var address = zomatoCall.restaurants[l].restaurant.location.address;
+                                    var featureImg = zomatoCall.restaurants[l].restaurant.featured_image;
+                                    var restaurantCuisine = zomatoCall.restaurants[l].restaurant.cuisines;
+                                    var userRating = zomatoCall.restaurants[l].restaurant.user_rating.aggregate_rating;
+                                    $("#card-results").append("<div class='card w-50 m-4 mx-auto'>" + "<img class='card-img-top' src='" + featureImg +
+                                        "' /> <div class='card-body'><h5 class='card-title'>" + restaurantName +
+                                        "</h5><span>Cuisine: " + restaurantCuisine +
+                                        "</span><br><a href='" + menuUrl +
+                                        "'<i class='fas fa-utensils'> Menu</i></a><br><small>" + address +
+                                        "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
+                                        "</i></small></div></div>")
+                                }
+                            } else {
+                                for (var j = 0; j < zomatoCall.restaurants.length; j++) {
+                                    for (var k = 0; k < commonArray.length; k++) {
+                                        //Changed the comp below to .retaurant.location.address
+                                        if (zomatoCall.restaurants[j].restaurant.location.address == commonArray[k]) {
+                                            var restaurantName = zomatoCall.restaurants[j].restaurant.name;
+                                            var menuUrl = zomatoCall.restaurants[j].restaurant.menu_url;
+                                            var address = zomatoCall.restaurants[j].restaurant.location.address;
+                                            var featureImg = zomatoCall.restaurants[j].restaurant.featured_image;
+                                            var restaurantCuisine = zomatoCall.restaurants[j].restaurant.cuisines;
+                                            var userRating = zomatoCall.restaurants[j].restaurant.user_rating.aggregate_rating;
+                                            $("#card-results").append("<div class='card w-50 m-4 mx-auto'>" + "<img class='card-img-top' src='" + featureImg +
+                                                "' /> <div class='card-body'><h5 class='card-title'>" + restaurantName +
+                                                "</h5><span>Cuisine: " + restaurantCuisine +
+                                                "</span><br><a href='" + menuUrl +
+                                                "'<i class='fas fa-utensils'> Menu</i></a><br><small>" + address +
+                                                "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
+                                                "</i></small></div></div>"
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    });
                 });
 
 
@@ -440,19 +551,21 @@ $('#input-submit').on('click', function (e) {
 
 
 
-$("#back-button-1").on("click", function (e) {
-    e.preventDefault();
-    $("#location").show();
-    $("#main-inputs").hide();
+    $("#back-button-1").on("click", function (e) {
+        e.preventDefault();
+        $("#location").show();
+        $("#main-inputs").hide();
+    });
+
+    $("#back-button-2").on("click", function (e) {
+        e.preventDefault();
+        $("#main-inputs").show();
+        $("#logo").show();
+        $("#results").hide();
+    })
+
+
+    // ------------------------    
+    //end of code
+    // ------------------------
 });
-
-$("#back-button-2").on("click", function (e) {
-    e.preventDefault();
-    $("#main-inputs").show();
-    $("#logo").show();
-    $("#results").hide();
-})
-
-// ------------------------    
-//end of code
-// ------------------------
