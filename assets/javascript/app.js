@@ -163,6 +163,7 @@ for (var i=0; i<alcoholData.length; i++)
         m=0;
 }
 console.log(item+" ( " +mf +" times ) ") ;
+$("#alcoholTrend-display").text(item);
 })
 
 
