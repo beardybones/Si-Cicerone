@@ -26,32 +26,9 @@ $("#location-submit").on("click", function () {
     var input = $("#location-input").val()
     firebase.database().ref('location/').push(input);
 })
-$("#input-submit").on("click", function (e) {
-    e.preventDefault();
-    // if alcohol: is not there then create
-    //if record of name is there updat count by 1
-    // database.ref("/alcohol").once("child_added", function (childSnapshot) {
-    //     console.log(childSnapshot)
-    //     var alcohol = $("#alcohol-input").val();
-    //     // if the value of childSnapshot.val().name 
-    //     // equals the value of #alcohol-input
-    //     if (childSnapshot.val().alcohol === alcohol) {
-    //         // then we know the record is in the database 
-    //         // and we will up the current record count by 1 
-    //     } else {
-    //         // else we will just create a new record 
-    //         // with the count set to 1
-    //         var alcoholSearch = {
-    //             alcohol: alcohol,
-    //             count: 1
-    //         };
-    //         firebase.database().ref('/alcohol').push(alcoholSearch);
-    //     }
-    // });
-    console.log("----------------")
-    database.ref('trending/alcohol').once('value').then(function(snapshot) {
-        console.log(snapshot)
-    });
+$("#input-submit").on("click", function () {
+    var input = $("#alcohol-input").val()
+    firebase.database().ref('alcohol/').push(input);
 })
 
 
@@ -131,8 +108,8 @@ database.ref("/foodLast").on("value", function (childSnapshot) {
 
     $("#food-display").text(foodSearch);
 });
-//this is the end of the firebase stuff
-//trending firebase term
+
+//trending alcohol term
 var alcoholData = [""];
 database.ref("/alcohol").on("child_added", function (childSnapshot) {
 
@@ -166,24 +143,74 @@ console.log(item+" ( " +mf +" times ) ") ;
 $("#alcoholTrend-display").text(item);
 })
 
+///trending food item
+var foodData = [""];
+database.ref("/food").on("child_added", function (childSnapshot) {
 
-  
-// var mf = 1;
-// var m = 0;
-// var item;
-// for (var i = 0; i < alcoholData.length; i++) {
-//     for (var j = i; j < alcoholData.length; j++) {
-//         if (alcoholData[i] == alcoholData[j])
-//             m++;
-//         if (mf < m) {
-//             mf = m;
-//             item = alcoholData[i];
-//         }
-//     }
-//     m = 0;
-// }
-// console.log(item + " ( " + mf + " times ) ");
+    console.log(childSnapshot.val());
 
+
+    console.log(foodData);
+
+    foodData.push(childSnapshot.val());
+    console.log(foodData)
+
+    $("#foodTrend-display").append(childSnapshot.val());
+var mf = 1;
+var m = 0;
+var item;
+for (var i=0; i<foodData.length; i++)
+{
+        for (var j=i; j<foodData.length; j++)
+        {
+                if (foodData[i] == foodData[j])
+                 m++;
+                if (mf<m)
+                {
+                  mf=m; 
+                  item = foodData[i];
+                }
+        }
+        m=0;
+}
+console.log(item+" ( " +mf +" times ) ") ;
+$("#foodTrend-display").text(item);
+})
+
+////Location Trending
+var locationData = [""];
+database.ref("/location").on("child_added", function (childSnapshot) {
+
+    console.log(childSnapshot.val());
+
+
+    console.log(locationData);
+
+    locationData.push(childSnapshot.val());
+    console.log(locationData)
+
+    $("#locationTrend-display").append(childSnapshot.val());
+var mf = 1;
+var m = 0;
+var item;
+for (var i=0; i<locationData.length; i++)
+{
+        for (var j=i; j<locationData.length; j++)
+        {
+                if (locationData[i] == locationData[j])
+                 m++;
+                if (mf<m)
+                {
+                  mf=m; 
+                  item = locationData[i];
+                }
+        }
+        m=0;
+}
+console.log(item+" ( " +mf +" times ) ") ;
+$("#locationTrend-display").text(item);
+})
+  ///End of location trending code
 
 
 
@@ -194,39 +221,6 @@ $("#alcoholTrend-display").text(item);
 $("#location").hide();
 $("#main-inputs").hide();
 $("#results").hide();
-
-//this is new username password stuff
-// const auth = firebase.auth();
-// auth.signInWithEmailAndPassword(email, pass);
-// auth.createUserWithEmailAndPassword(email, pass);    
-// auth.onAuthStateChanged(firebaseUser => { });
-
-//                 //get elements from the dom
-// const txtEmail = document.getElementById('txtEmail');
-// const txtPassword = document.getElementById('txtPassword');
-// const btnLogin = document.getElementById('btnLogin');
-// const btnSignUp = document.getElementById('btnSignUp');
-// const btnLogout = document.getElementById('btnLogout');
-
-//             //add login event 
-//     btnLogin.addEventListener('click', e=>{
-//                 //get email and pass
-//         const email = txtEmail.val();
-//         const pass = txtPassword.val();
-//         const auth = firebase.auth();
-//                 //sign in
-//         const promise = auth.signInWithEmailAndPassword(email, pass);
-//         promise.catch(e => console.log(e.message));
-
-
-//     })
-
-
-
-
-
-//this is the end of new password stuff
-
 
 
 

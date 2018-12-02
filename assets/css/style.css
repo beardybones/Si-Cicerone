@@ -48,3 +48,24 @@ body{
     color: #000000;
     border-bottom: black solid;
 }
+
+#locationTrend-display{
+    
+    font-weight: bold;
+    color: #000000;
+}
+#alcoholTrend-display{
+    
+    font-weight: bold;
+    color: #000000;
+}
+#foodTrend-display{
+    
+    font-weight: bold;
+    color: #000000;
+}
+#titleRecentTrend{
+        font-weight: bold;
+        color: #000000;
+        border-bottom: black solid;
+}
