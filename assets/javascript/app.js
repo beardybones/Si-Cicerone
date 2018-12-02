@@ -3,7 +3,6 @@ $("#location").hide();
 $("#main-inputs").hide();
 $("#results").hide();
 
-
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyAhTmmpStfimrjJ5ecnpzrkasnHC9dZG58",
@@ -31,6 +30,8 @@ $("#input-submit").on("click", function () {
     var input = $("#alcohol-input").val()
     firebase.database().ref('alcohol/').push(input);
 })
+
+
 $("#input-submit").on("click", function () {
     var input = $("#food-input").val()
     firebase.database().ref('food/').push(input);
@@ -107,21 +108,17 @@ database.ref("/foodLast").on("value", function (childSnapshot) {
 
     $("#food-display").text(foodSearch);
 });
-//this is the end of the firebase stuff
-//trending firebase term
+
+//trending alcohol term
 var alcoholData = [""];
 database.ref("/alcohol").on("child_added", function (childSnapshot) {
 
-    // console.log(childSnapshot.val());
-    // console.log("hi")
-
-    // console.log(alcoholData);
-
+  
+  
     alcoholData.push(childSnapshot.val());
     // console.log(alcoholData)
 
     $("#alcoholTrend-display").append(childSnapshot.val());
-});
 var mf = 1;
 var m = 0;
 var item;
@@ -136,6 +133,45 @@ for (var i = 0; i < alcoholData.length; i++) {
     }
     m = 0;
 }
+
+console.log(item+" ( " +mf +" times ) ") ;
+$("#alcoholTrend-display").text(item);
+})
+
+///trending food item
+var foodData = [""];
+database.ref("/food").on("child_added", function (childSnapshot) {
+
+    console.log(childSnapshot.val());
+
+
+    console.log(foodData);
+
+    foodData.push(childSnapshot.val());
+    console.log(foodData)
+
+    $("#foodTrend-display").append(childSnapshot.val());
+var mf = 1;
+var m = 0;
+var item;
+for (var i=0; i<foodData.length; i++)
+{
+        for (var j=i; j<foodData.length; j++)
+        {
+                if (foodData[i] == foodData[j])
+                 m++;
+                if (mf<m)
+                {
+                  mf=m; 
+                  item = foodData[i];
+                }
+        }
+        m=0;
+}
+console.log(item+" ( " +mf +" times ) ") ;
+$("#foodTrend-display").text(item);
+})
+=======
 // console.log(item+" ( " +mf +" times ) ") ;
 
 
@@ -145,31 +181,49 @@ for (var i = 0; i < alcoholData.length; i++) {
 // auth.createUserWithEmailAndPassword(email, pass);    
 // auth.onAuthStateChanged(firebaseUser => { });
 
-//                 //get elements from the dom
-// const txtEmail = document.getElementById('txtEmail');
-// const txtPassword = document.getElementById('txtPassword');
-// const btnLogin = document.getElementById('btnLogin');
-// const btnSignUp = document.getElementById('btnSignUp');
-// const btnLogout = document.getElementById('btnLogout');
+////Location Trending
+var locationData = [""];
+database.ref("/location").on("child_added", function (childSnapshot) {
 
-//             //add login event 
-//     btnLogin.addEventListener('click', e=>{
-//                 //get email and pass
-//         const email = txtEmail.val();
-//         const pass = txtPassword.val();
-//         const auth = firebase.auth();
-//                 //sign in
-//         const promise = auth.signInWithEmailAndPassword(email, pass);
-//         promise.catch(e => console.log(e.message));
+    console.log(childSnapshot.val());
 
 
-//     })
+    console.log(locationData);
+
+    locationData.push(childSnapshot.val());
+    console.log(locationData)
+
+    $("#locationTrend-display").append(childSnapshot.val());
+var mf = 1;
+var m = 0;
+var item;
+for (var i=0; i<locationData.length; i++)
+{
+        for (var j=i; j<locationData.length; j++)
+        {
+                if (locationData[i] == locationData[j])
+                 m++;
+                if (mf<m)
+                {
+                  mf=m; 
+                  item = locationData[i];
+                }
+        }
+        m=0;
+}
+console.log(item+" ( " +mf +" times ) ") ;
+$("#locationTrend-display").text(item);
+})
+  ///End of location trending code
 
 
 
 
 
-//this is the end of new password stuff
+
+
+
+
 
 checkDataFunction = function () {
 
@@ -233,6 +287,7 @@ $("#location-submit").on("click", function (e) {
             $("#main-inputs").show();
 
         });
+})
 
     // On Submit builds the two urls required for the Zomato ajax calls
     $('#input-submit').on('click', function (e) {
@@ -261,26 +316,127 @@ $("#location-submit").on("click", function (e) {
             var cuisineId;
             ct = 0;
 
-            for (var i = 0; i < responseOne.cuisines.length; i++) {
-                ct++;
-                // compare our cuisine input to the zomato api
-                if ((responseOne.cuisines[i].cuisine.cuisine_name).toLowerCase() === (cuisineInput).toLocaleLowerCase()) {
-                    cuisineId = responseOne.cuisines[i].cuisine.cuisine_id;
-                    var restaurantsArray = [];
-                    var urlCuisine = '&cuisines=' + cuisineId;
+    zomatoApiKey = '7fd9b4ff24a0fa2eae39b02482c2e9b1';
+    urlOne = 'https://developers.zomato.com/api/v2.1/cuisines?';
+    urlTwo = 'https://developers.zomato.com/api/v2.1/search?';
+    urlRadius = '&radius=' + radiusMeters;
 
-                    var urlLocality = '&locality=' + userLocation;
-                    var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine + urlLocality;
-                    var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine + "&sort=real_distance&order=desc";
+    // Ajax call to Zomato to gather cuisine object for the lat/long coordinates
+    cuisineUrl = urlOne + urlLat + urlLon;
+    console.log(cuisineUrl);
+
+    $.ajax({
+        url: cuisineUrl,
+        method: "GET",
+        headers: {
+            "user-key": zomatoApiKey
+        }
+    }).then(function (responseOne) {
+
+        var cuisineId;
+        ct = 0;
+
+        for (var i = 0; i < responseOne.cuisines.length; i++) {
+            ct++;
+            // compare our cuisine input to the zomato api
+            if ((responseOne.cuisines[i].cuisine.cuisine_name).toLowerCase() === (cuisineInput).toLocaleLowerCase()) {
+                cuisineId = responseOne.cuisines[i].cuisine.cuisine_id;
+                var restaurantsArray = [];
+                var urlCuisine = '&cuisines=' + cuisineId;
+
+                var urlLocality = '&locality=' + userLocation;
+                var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine + urlLocality;
+                var queryURL = urlTwo + urlLat + urlLon + urlRadius + urlCuisine + "&sort=real_distance&order=desc";
 
 
-                    // ajax call to Zomato to get restaurants based on location and cuisine and build restaurant name array for comparison with open beer databasd
+                // ajax call to Zomato to get restaurants based on location and cuisine and build restaurant name array for comparison with open beer databasd
+                $.ajax({
+                    url: queryURL,
+                    method: "GET",
+                    headers: {
+                        "user-key": zomatoApiKey
+                    }
+                }).then(function (responseTwo) {
+
+                    for (var i = 0; i < responseTwo.restaurants.length; i++) {
+                        restaurantsArray.push(responseTwo.restaurants[i].restaurant.name);
+                    }
+                    // Storing restaurantsArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
+
+                    sessionStorage.setItem('restaurantsArray', JSON.stringify(restaurantsArray));
+                    sessionStorage.setItem('zomatoCall', JSON.stringify(responseTwo));
+                    ct = 0;
+                    // Ajax Call to OpenBeerDB
+                    //this is the search term for beer set up
+
+                    beerInput = $("#alcohol-input").val().trim()
+                    beerURL = "https://data.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database%40public-us&q=" + beerInput + "&facet=style_name&facet=cat_name&facet=name_breweries&facet=country&facet=city&refine.country=United+States&refine.city=" + userLocation;
                     $.ajax({
-                        url: queryURL,
-                        method: "GET",
-                        headers: {
-                            "user-key": zomatoApiKey
+                        url: beerURL, method: "GET"
+                    }).then(function (response) {
+                        var sudzyArray = [];
+                        for (var i = 0; i < response.records.length; i++) {
+                            sudzyArray.push(response.records[i].fields.name_breweries);
                         }
+                      
+                        // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
+                        sessionStorage.setItem('sudzyArray', JSON.stringify(sudzyArray));
+                        ct = 0;
+                        // Retrieving  arrays from session storage to do the comparison 
+                        var restaurantsArray = JSON.parse(sessionStorage.getItem('restaurantsArray'));
+                        var sudzyArray = JSON.parse(sessionStorage.getItem('sudzyArray'));
+                        // console.log(restaurantsArray);
+                        // Checking for commonalities between the two arrays
+                        var commonArray = [];
+                        for (var i = 0; i < sudzyArray.length; i++) {
+                            if (restaurantsArray.includes(sudzyArray[i])) {
+                                commonArray.push(sudzyArray[i]);
+                                // alert('Hit: ' + sudzyArray[i]);
+                            }
+                            sessionStorage.setItem('commonArray', commonArray);
+                        }
+                        var zomatoCall = JSON.parse(sessionStorage.getItem('zomatoCall'));
+                        if (commonArray === undefined || commonArray.length == 0) {
+                            console.log(commonArray);
+                            $("#card-results").empty();
+                            for (var l = 0; l < 5; l++) {
+                                var restaurantName = zomatoCall.restaurants[l].restaurant.name;
+                                var menuUrl = zomatoCall.restaurants[l].restaurant.menu_url;
+                                var address = zomatoCall.restaurants[l].restaurant.location.address;
+                                var featureImg = zomatoCall.restaurants[l].restaurant.featured_image;
+                                var restaurantCuisine = zomatoCall.restaurants[l].restaurant.cuisines;
+                                var userRating = zomatoCall.restaurants[l].restaurant.user_rating.aggregate_rating;
+                                $("#card-results").append("<div class='card w-50 m-4 mx-auto'>" + "<img class='card-img-top' src='" + featureImg +
+                                    "' /> <div class='card-body'><h5 class='card-title'>" + restaurantName +
+                                    "</h5><span>Cuisine: " + restaurantCuisine +
+                                    "</span><br><a href='" + menuUrl +
+                                    "'<i class='fas fa-utensils'> Menu</i></a><br><small>" + address +
+                                    "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
+                                    "</i></small></div></div>")
+                            }
+                        } else {
+                            for (var j = 0; j < zomatoCall.restaurants.length; j++) {
+                                for (var k = 0; k < commonArray.length; k++) {
+                                    if (zomatoCall.restaurants[j].restaurant.name == commonArray[k]) {
+                                        var restaurantName = zomatoCall.restaurants[j].restaurant.name;
+                                        var menuUrl = zomatoCall.restaurants[j].restaurant.menu_url;
+                                        var address = zomatoCall.restaurants[j].restaurant.location.address;
+                                        var featureImg = zomatoCall.restaurants[j].restaurant.featured_image;
+                                        var restaurantCuisine = zomatoCall.restaurants[j].restaurant.cuisines;
+                                        var userRating = zomatoCall.restaurants[j].restaurant.user_rating.aggregate_rating;
+                                        $("#card-results").append("<div class='card w-50 m-4 mx-auto'>" + "<img class='card-img-top' src='" + featureImg +
+                                            "' /> <div class='card-body'><h5 class='card-title'>" + restaurantName +
+                                            "</h5><span>Cuisine: " + restaurantCuisine +
+                                            "</span><br><a href='" + menuUrl +
+                                            "'<i class='fas fa-utensils'> Menu</i></a><br><small>" + address +
+                                            "</small><br><small><i class='fas fa-star'>Average User Rating: " + userRating +
+                                            "</i></small></div></div>"
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
                     }).then(function (responseTwo) {
 
                         for (var i = 0; i < responseTwo.restaurants.length; i++) {
@@ -375,23 +531,23 @@ $("#location-submit").on("click", function (e) {
                                 }
                             }
                         });
-
                     });
+                });
 
 
-                    break;
-                } else if (ct >= responseOne.cuisines.length) {
-                    alert("nothing found");
-                    ct = 0;
-                }
+                break;
+            } else if (ct >= responseOne.cuisines.length) {
+                alert("nothing found");
+                ct = 0;
             }
-        })
+        }
+    })
 
-        // move to results page
-        $("#main-inputs").hide();
-        $("#logo").hide();
-        $("#results").show();
-    });
+    // move to results page
+    $("#main-inputs").hide();
+    $("#logo").hide();
+    $("#results").show();
+});
 
 
 
@@ -407,6 +563,7 @@ $("#location-submit").on("click", function (e) {
         $("#logo").show();
         $("#results").hide();
     })
+
 
     // ------------------------    
     //end of code
