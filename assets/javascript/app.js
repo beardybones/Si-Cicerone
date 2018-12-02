@@ -309,24 +309,35 @@ $("#location-submit").on("click", function (e) {
                                 sudzyArray.push(response.records[i].fields.address1);
                             }
                             // Storing sudzyArray and responseTwo ojbect in session storage for retrieval later outstde of this scope to do the comparison 
-                            console.log(sudzyArray);
+                            console.log(sudzyArray[0]);
                             sessionStorage.setItem('sudzyArray', JSON.stringify(sudzyArray));
                             ct = 0;
                             // Retrieving  arrays from session storage to do the comparison 
                             var restaurantsArray = JSON.parse(sessionStorage.getItem('restaurantsArray'));
-                            console.log(restaurantsArray);
+                            console.log(restaurantsArray[2]);
                             var sudzyArray = JSON.parse(sessionStorage.getItem('sudzyArray'));
                             console.log(sudzyArray);
                             // console.log(restaurantsArray);
                             // Checking for commonalities between the two arrays
                             var commonArray = [];
-                            for (var i = 0; i < sudzyArray.length; i++) {
-                                if (restaurantsArray.includes(sudzyArray[i])) {
-                                    commonArray.push(sudzyArray[i]);
-                                    // alert('Hit: ' + sudzyArray[i]);
+
+
+
+                            for (var q = 0; q < sudzyArray.length; q++) {
+                                for (var i = 0; i < restaurantsArray.length; i++) {
+                                    if (restaurantsArray[i].includes(sudzyArray[q])) {
+                                        commonArray.push(restaurantsArray[i]);
+                                        console.log(commonArray);
+                                    }
                                 }
-                                sessionStorage.setItem('commonArray', commonArray);
                             }
+                            // for (var i = 0; i < sudzyArray.length; i++) {
+                            //     if (restaurantsArray.includes(sudzyArray[i])) {
+                            //         commonArray.push(sudzyArray[i]);
+                            //         alert('Hit: ' + sudzyArray[i]);
+                            //     }
+                            sessionStorage.setItem('commonArray', commonArray);
+                            // }
                             var zomatoCall = JSON.parse(sessionStorage.getItem('zomatoCall'));
                             if (commonArray === undefined || commonArray.length == 0) {
                                 console.log(commonArray);
