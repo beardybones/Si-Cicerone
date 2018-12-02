@@ -171,7 +171,6 @@ for (var i=0; i<foodData.length; i++)
 console.log(item+" ( " +mf +" times ) ") ;
 $("#foodTrend-display").text(item);
 })
-=======
 // console.log(item+" ( " +mf +" times ) ") ;
 
 
