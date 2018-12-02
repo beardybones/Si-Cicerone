@@ -72,53 +72,54 @@
           <span class="fas fa-chevron-left" aria-hidden="true"></span>
         </button>
         <button type="submit" class="btn btn-outline-warning" id="input-submit">Submit</button>
-        
         <!--Most recent search result-->
-        <div class="mostRecentSearch m-4 p-2">
-          <div>
+        <div class="container">
+          <div class="mostRecentSearch m-4 p-2">
             <div>
-              <h6 id="titleRecent">Most Recent Search</h6>
-            </div>
-            <div id="recent-search">
-              <h6 id="location-display">Location: </h6>
-              <h6 id="alcohol-display">Alcohol: </h6>
-              <h6 id="food-display">Food: </h6>
+              <div>
+                <h6 id="titleRecent">Most Recent Search</h6>
+              </div>
+              <div id="recent-search">
+                <h6 id="location-display">Location: </h6>
+                <h6 id="alcohol-display">Alcohol: </h6>
+                <h6 id="food-display">Food: </h6>
+              </div>
             </div>
           </div>
-        </div>
-        <!--End of most recent search results-->
-        <!--trending search result-->
-        <!-- <div class="mostRecentSearch m-4 p-2">
-          <div>
-            <div>
-              <h6 id="titleRecentTrend">Most Recent Trend</h6>
-            </div>
-            <div id="recentTrend-search">
-              <h6 id="locationTrend-display">Location: </h6>
-              <h6 id="alcoholTrend-display">Alcohol: </h6>
-              <h6 id="foodTrend-display">Food: </h6>
-            </div>
-          </div>
-        </div> -->
-        <!--end of trending search result-->
+          <!--End of most recent search results-->
 
+          <!--trending search result-->
+          <div class="mostRecentSearch m-4 p-2">
+            <div>
+              <div>
+                <h6 id="titleRecentTrend">Most Recent Trend</h6>
+              </div>
+              <div id="recentTrend-search">
+                <h6 id="locationTrend-display">Location: </h6>
+                <h6 id="alcoholTrend-display">Alcohol: </h6>
+                <h6 id="foodTrend-display">Food: </h6>
+              </div>
+            </div>
+          </div>
       </form>
 
 
+      <!--end of trending search result-->
 
     </div>
+  </div>
 
-    <div class="container text-center m-1" id="results">
+  <div class="container text-center m-1" id="results">
 
-      <button type="submit" class="btn btn-outline-warning btn-lg mb-4" id="back-button-2">
-        <span class="fas fa-chevron-left" aria-hidden="true"></span>
-      </button>
+    <button type="submit" class="btn btn-outline-warning btn-lg mb-4" id="back-button-2">
+      <span class="fas fa-chevron-left" aria-hidden="true"></span>
+    </button>
 
 
-      <div class="card-column" id="card-results">
+    <div class="card-column" id="card-results">
 
-      </div>
     </div>
+  </div>
 
   </div>
 
@@ -132,7 +133,6 @@
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
   <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase.js"></script>
-
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
     crossorigin="anonymous"></script>
