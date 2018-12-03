@@ -214,7 +214,7 @@ $("#age-submit").on("click", function (e) {
     // if the age is < 21 alert the user and send them away!
 
     else {
-        alert("You are not old Enough Goodbye!");
+        // alert("You are not old Enough Goodbye!");
         window.location.href = "http://www.nick.com"
     }
 })
